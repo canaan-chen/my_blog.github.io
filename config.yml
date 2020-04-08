@@ -1,4 +1,4 @@
-#baseURL: 
+baseURL: "https://canaan-chen.github.io/"
 #baseURL: "//example.org"
 relativeURLs: true
 uglyURLs: true
