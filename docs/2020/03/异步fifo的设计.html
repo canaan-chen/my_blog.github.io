@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        异步fifo的设计 - UncleFish&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="这篇文章主要讲解了如何设计一个异步Fifo。
+" />
+  <meta name="generator" content="Hugo 0.68.3 with theme pure" />
+  <title>异步fifo的设计 - UncleFish&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="//example.org/css/style.min.a3062b17e67fb6899092f3888ff94f63680d7b023c87421c21885eb1cd1f669e.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="异步fifo的设计" />
+<meta property="og:description" content="这篇文章主要讲解了如何设计一个异步Fifo。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//example.org/2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1.html" />
+<meta property="article:published_time" content="2020-03-15T17:58:18+08:00" />
+<meta property="article:modified_time" content="2020-03-15T17:58:18+08:00" />
+<meta itemprop="name" content="异步fifo的设计">
+<meta itemprop="description" content="这篇文章主要讲解了如何设计一个异步Fifo。">
+<meta itemprop="datePublished" content="2020-03-15T17:58:18&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-15T17:58:18&#43;08:00" />
+<meta itemprop="wordCount" content="2435">
+
+
+
+<meta itemprop="keywords" content="IC Design,FIFO," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="异步fifo的设计"/>
+<meta name="twitter:description" content="这篇文章主要讲解了如何设计一个异步Fifo。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="//example.org/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Unclefish</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">unclfish | 鱼叔的博客</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Shanghai, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="../../">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="../../posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">Archives</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="../../categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="../../tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">Tags</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>目录在文章的下面，记得点击Catalogue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="//example.org/categories/windows%E7%BE%8E%E5%8C%96.html" class="category-list-link">windows美化</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E4%B8%80%E4%B8%AAic%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB.html" class="category-list-link">一个ic工程师的自我修养</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips.html" class="category-list-link">博客建站tips</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0.html" class="category-list-link">影评文章</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E7%95%99%E5%AD%A6%E8%BF%99%E4%BB%B6%E5%B0%8F%E4%BA%8B.html" class="category-list-link">留学这件小事</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E9%B1%BC%E5%8F%94%E7%9A%84%E8%A7%86%E7%95%8C.html" class="category-list-link">鱼叔的视界</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/04/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2.html" class="title">如何在windows 体验极致模仿Mac os系统桌面</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-06 00:23:26 &#43;0800 &#43;08" itemprop="datePublished">2020-04-06</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips.html" class="title">hexo Next 主题修改tips</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-04 15:01:48 &#43;0800 &#43;08" itemprop="datePublished">2020-04-04</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95.html" class="title">hexo 博客拓展 | CODING平台托管以及个性化域名</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-30 17:46:38 &#43;0800 &#43;08" itemprop="datePublished">2020-03-30</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1.html" class="title">I2C 模块设计|Master Reg 设计</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-21 20:37:05 &#43;0800 &#43;08" itemprop="datePublished">2020-03-21</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96.html" class="title">hexo next 主题优化 | 这里可能有你遇到所有问题的答案</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-19 14:19:42 &#43;0800 &#43;08" itemprop="datePublished">2020-03-19</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">Catalogue</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="../../2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1.html"
+    >异步fifo的设计</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="//example.org/2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1.html" class="article-date">
+  <time datetime="2020-03-15 17:58:18 &#43;0800 &#43;08" itemprop="datePublished">2020-03-15</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="../../categories/%E4%B8%80%E4%B8%AAic%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB/"> 一个IC工程师的自我修养 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="../../tags/ic-design/"> IC Design </a>
+    <a class="article-tag-link" href="../../tags/fifo/"> FIFO </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="../../2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1.html#comments"
+            class="article-comment-link">Comments</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 2435words</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 5minutes </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>这篇文章主要讲解了如何设计一个异步Fifo。</p>
+<h2 id="1-资料">1. 资料</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/42991844">异步FIFO设计（1）</a></p>
+<p><a href="https://blog.csdn.net/deng_d1/article/details/50179677">异步FIFO设计原理及Verliog源代码_网络_deng_d1的博客-CSDN博客</a></p>
+<h2 id="2-原理介绍">2. 原理介绍</h2>
+<p>{% asset_img 1.png %}</p>
+<h3 id="21-使用fifo的情况">2.1 使用FIFO的情况</h3>
+<ul>
+<li>两个不同时钟域进行数据传输时可以用FIFO</li>
+<li>对于不同宽度的数据接口也可以用FIFO， 例如单片机8位输出，而DSP 16位数据输入。</li>
+</ul>
+<h3 id="22-fifo的相关参数">2.2 FIFO的相关参数</h3>
+<ul>
+<li>FIFO的宽度：表示FIFO进行一次读写操作的数据位。</li>
+<li>FIFO的深度：指的是FIFO能存储多少个N位的数据，N为宽度。</li>
+<li>满标志：FIFO已满或将要满时由FIFO的状态电路送出的一个信号，以阻止FIFO的写操作继续向FIFO中写数据而造成溢出（overflow）</li>
+<li>空标志：FIFO已空或将要空时由FIFO的状态电路送出的一个信号，以阻止FIFO的读操作继续从FIFO中读出数据而造成无效数据的读出（underflow）。</li>
+<li>读时钟：读数据所遵循的时钟。</li>
+<li>写时钟：写操作所需要遵循的时钟。</li>
+<li>读指针：指向下一个读出地址。读完后自动加1</li>
+<li>写指针：指向下一个写入地址，写完后自动加1</li>
+</ul>
+<h3 id="23-空满状态的判断">2.3 空满状态的判断</h3>
+<p><a href="https://blog.csdn.net/zyn1347806/article/details/79626452">FIFO空满判断与地址转换的思考_网络_zyn1347806的博客-CSDN博客</a></p>
+<p><a href="https://www.cnblogs.com/xh13dream/p/9265042.html">异步fifo设计（1）</a></p>
+<ul>
+<li>用格雷码来作地址判断（多引入一位作位判断，比如设计深度为8，宽度为8的异步FIFO，设计其指针位数为4,即 n+1）
+<ul>
+<li>当最高位和次高位相同时，其余位相同认为是读空</li>
+<li>当最高位和次高位不同时，其余位相同认为是写满</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-读空标志位的产生">2.4 读空标志位的产生</h3>
+<p><a href="https://www.sohu.com/a/114158723_458015">异步FIFO设计(非常详细，图文并茂，值得一看！）</a></p>
+<p>FIFO中存在两种指针，rd_ptr 和 wr_ptr。只有两种状态下FIFO才会为空：</p>
+<ul>
+<li>系统复位，读写指针都被清空。</li>
+<li>读出速度大于写入速度，读地址赶上写地址。</li>
+</ul>
+<p>空标志位的产生要在读时钟域里完成，这样不至于FIFO为空时，而空标志位还没有发生，但是可能发生FIFO里已经有数据了，但是空标志位还是没有被撤销，不过就算在最坏的情况下，空标志撤销也只是滞后3个周期（因为会需要时钟的同步，经过两级触发器）。还有一种情况，就是空标志比较逻辑检测到读地址和写地址相同后，紧接着发生写操作，导致写地址加1，由于同步模块的滞后性，导致没法及时更新写地址，会产生一个虚假的空信号，称作“虚空”。</p>
+<h3 id="25-读满标志位的产生">2.5 读满标志位的产生</h3>
+<p>读满状态可以理解为，读地址超写地址一圈，两个地址仍然在同一个地方，这时候引入指示位来进行区别和判断。</p>
+<p>读满状态判断：</p>
+<ol>
+<li>
+<p><strong>最高位相异，因为两个指针速度不同， 写超前于读。</strong></p>
+</li>
+<li>
+<p><strong>出去最高位，次高位取反后两者相同。比如：写指针已经走了一圈了跑到3，此时写指针：1110，而读指针第一次走到3，指针数值为：0010。⇒ 发现最高位和次高位均不同，表示满状态。</strong></p>
+</li>
+<li>
+<p><strong>相应的，如果最高位和次高位均相同则表示空状态。</strong></p>
+<p>{% asset_img Untitled.png %}</p>
+</li>
+</ol>
+<h2 id="3代码的实现">3.代码的实现</h2>
+<p>这里以一个8x8的fifo作为案例来进行代码的设计，之后再做一个fifo的封装实现自定义化模块。</p>
+<h3 id="31-格雷码转换">3.1 格雷码转换</h3>
+<p>需要用Gray Code来实现地址，从而降低亚稳态。</p>
+<p>基本的转换关系：</p>
+<ul>
+<li>二进制转格雷码：
+<ul>
+<li>G[ n-1 ] = b[ n - 1 ] （最高位）</li>
+<li>G [i] = b [ i ] ^ b [i + 1]</li>
+</ul>
+</li>
+<li>格雷码转换二进制：
+<ul>
+<li>b[n-1] = G [n-1]</li>
+<li>b [ i ] = G [ i ]^ G [i+1] ^ &hellip;&hellip;^ G[ n - 1] = G [ i ] ^ b[ i + 1 ]</li>
+</ul>
+</li>
+</ul>
+<p>EDA link: <a href="https://www.edaplayground.com/x/4QrG">https://www.edaplayground.com/x/4QrG</a></p>
+<pre><code>//sample of Binary to Gray
+module B2G (
+		B,   // B input binary
+		G    // output Gray
+);
+input wire [3:0] B;
+output reg [3:0] G;
+always @(*) begin // 使用always时，要加@
+		G [3] = B [3];
+		G [2] = B[2] ^ B[3];
+		G [1] = B[1] ^ B[2];
+		G [0] = B[0] ^ B[1];
+end
+endmodule
+
+//TestBench
+module tb ();
+  reg [3:0] B,G;
+  reg [2:0] i;
+//  reg clk;
+  initial begin
+    $dumpfile(&quot;dump.vcd&quot;);// dump waive
+    $dumpvars(1, tb);
+    B = 0;
+    i = 0;
+    #10;
+    B =1; #10;
+   for (i=0; i&lt;=7; i = i+1) begin
+		   B = B +1;
+			  #10;
+   end
+  end
+
+  B2G dut(
+    .B(B),
+    .G(G)
+  );
+endmodule
+</code></pre>
+<h3 id="32-写模块控制">3.2 写模块控制</h3>
+<p>写模块的功能</p>
+<ul>
+<li>写信号来的时候，写指针地址加1</li>
+<li>将wr 指针和rd 指针进行比较，看是否写满了。其中注意的是，满状态要将读指针同步到写时钟里，需要进行同步后再比较。</li>
+</ul>
+<p>输入信号：wr_clk, wr_en, wr_rst_n, rd_add_glay</p>
+<p>输出信号：wr_add_bin, wr_add_glay</p>
+<p>EDA link <a href="https://www.edaplayground.com/x/5565">https://www.edaplayground.com/x/5565</a></p>
+<pre><code class="language-verilog">// Code your design here
+`include &quot;B2G.v&quot;
+module wr_ctrl (
+		input wr_clk,
+        input wr_rst_n,
+		input wr_en,
+ 		 input [3:0] rd_add_glay,
+ 		 output [3:0] wr_add_bin,
+ 		 output [3:0] wr_add_glay,
+		output reg wr_full
+);
+
+reg [3:0] wr_add_bin_r;
+reg [3:0] wr_add_glay_r;
+reg [3:0] rd_add_glay_r1;
+reg [3:0] rd_add_glay_r2;
+// 地址增加模块
+
+always @ (posedge wr_clk or negedge wr_rst_n or posedge wr_en) begin
+	if (wr_en) begin // 所有的操作都是在始能下开始的
+	if (!wr_rst_n) begin //复位操作
+		wr_add_bin_r &lt;= 0; //地址指针复位
+		wr_full &lt;= 0;
+	end
+    else if (!wr_full) begin //不满情况下
+       wr_add_bin_r &lt;= wr_add_bin_r + 1;// 地址加1
+      end
+end
+end
+
+//调用格雷码转换
+B2G wr_B2G(
+	.B (wr_add_bin_r),
+	.G (wr_add_glay_r)
+);
+
+//判断满状态，如果格雷码首两位和读地址互异，则满
+//同步读地址
+always @(posedge wr_clk) begin
+	{rd_add_glay_r2,rd_add_glay_r1} &lt;= {rd_add_glay_r1, rd_add_glay} ;
+end
+  always @(*) begin
+    wr_full = (rd_add_glay_r2[3]^wr_add_glay_r[3]) &amp;&amp; (rd_add_glay_r2[2]^wr_add_glay_r[2]) &amp;&amp; (rd_add_glay_r2[1:0] == wr_add_glay_r [1:0]); // 首两位互异，且后几位相同
+  end
+assign wr_add_bin = wr_add_bin_r;
+assign wr_add_glay = wr_add_glay_r;
+
+endmodule
+</code></pre>
+<h3 id="33-读模块控制">3.3 读模块控制</h3>
+<p>功能代码和写模块相似，只是空标志的判断条件不同，要求两个地址完全相同才可以。</p>
+<p>EDA Link:  <a href="https://www.edaplayground.com/x/3tfy">https://www.edaplayground.com/x/3tfy</a></p>
+<pre><code class="language-verilog">// Code your design here
+`include &quot;B2G.v&quot;
+module rd_ctrl (
+		input rd_clk,
+     input rd_rst_n,
+		input rd_en,
+ 		 input [3:0] wr_add_glay,
+ 		 output [3:0] rd_add_bin,
+ 		 output [3:0] rd_add_glay,
+		output reg rd_empty
+);
+
+reg [3:0] rd_add_bin_r;
+reg [3:0] rd_add_glay_r;
+reg [3:0] wr_add_glay_r1;
+reg [3:0] wr_add_glay_r2;
+// 地址增加模块
+
+always @ (posedge rd_clk or negedge rd_rst_n or posedge rd_en) begin
+	if (rd_en) begin // 所有的操作都是在始能下开始的
+	if (!rd_rst_n) begin //复位操作
+		rd_add_bin_r &lt;= 0; //地址指针复位
+		rd_empty &lt;= 0;
+	end
+    else if (!rd_empty) begin //不满情况下
+       rd_add_bin_r &lt;= rd_add_bin_r + 1;// 地址加1
+      end
+end
+end
+
+//调用格雷码转换
+B2G rd_B2G(
+	.B (rd_add_bin_r),
+	.G (rd_add_glay_r)
+);
+
+//判断满状态，如果格雷码首两位和读地址互异，则满
+//同步读地址
+always @(posedge rd_clk) begin
+	{wr_add_glay_r2,wr_add_glay_r1} &lt;= {wr_add_glay_r1, wr_add_glay} ;
+end
+  always @(*) begin
+    rd_empty = wr_add_glay_r2 == rd_add_glay_r ; // 地址相同时，表示读空
+  end
+assign rd_add_bin = rd_add_bin_r;
+assign rd_add_glay = rd_add_glay_r;
+
+endmodule
+</code></pre>
+<h3 id="34-fifo-mem-ctrl">3.4 FIFO Mem Ctrl</h3>
+<p>主体部分会建立一个FIFO的mem，并且输入数据和读出数据。</p>
+<p>控制模块功能简介：</p>
+<ul>
+<li>根据地址将对应的数据存储或者读取</li>
+<li>EDA link <a href="https://www.edaplayground.com/x/bWf">https://www.edaplayground.com/x/bWf</a></li>
+</ul>
+<p>Bug ： 因为弄错数组的写法，导致出现了bug reg [wordsize : 0] array_name [0 : arraysize]; 其中第二个是0-size，例如需要生成8x8 size的数组，应该为 reg [7:0] mem [0:7] 不是 reg [7:0] mem [2:0] ;</p>
+<pre><code class="language-verilog">module fifo_mem (
+		input wr_clk,
+		input rd_clk,
+  input rst_n,
+  input [7:0] wdata,
+  input [3:0] wr_add_bin, //写地址
+  input [3:0] rd_add_bin, //读地址
+		input wr_full,
+		input rd_empty,
+	output reg [7:0] rdata
+
+);
+
+// 建立一个8x8的reg
+  reg [7:0] fifo_mem [0:7]; //建立一个宽度为8深度也为8的mem
+reg [2:0] wr_add; //内部3位地址
+reg [2:0] rd_add; //内部3位地址
+  reg [2:0] i;
+  
+assign wr_add = wr_add_bin [2:0];
+assign rd_add = rd_add_bin [2:0];
+
+// 初始化
+  
+  always @(negedge rst_n) begin
+    if (!rst_n) begin
+      for (i=0; i&lt;=7 ; i = i+1) begin
+        fifo_mem [i] &lt;= 0;
+      end
+    end
+  end
+      
+always @(posedge wr_clk) begin
+  if (!wr_full) begin
+			fifo_mem [wr_add] &lt;= wdata;
+  end
+end
+
+always @(posedge rd_clk) begin
+		if (!rd_empty) 
+			rdata &lt;= fifo_mem [rd_add] ;
+end
+
+
+endmodule
+</code></pre>
+<h3 id="35-top-level-各模块集成">3.5 Top level 各模块集成</h3>
+<p>EDA link : <a href="https://www.edaplayground.com/x/6Mfp">https://www.edaplayground.com/x/6Mfp</a></p>
+<pre><code class="language-verilog">// Code your design here
+`include &quot;fifo_mem.v&quot;
+`include &quot;wr_ctrl.v&quot;
+`include &quot;rd_ctrl.v&quot;
+`include &quot;B2G.v&quot;
+
+
+module fifo(
+	input wr_clk,
+	input rd_clk,
+	input rst_n,
+	input wr_en,
+	input rd_en,
+	input [7:0] data_i,
+  	output reg [7:0] data_o,
+  	output reg full, // 用于控制数据的输入
+);
+
+wire [3:0] wr_add_glay;
+wire [3:0] rd_add_glay;
+wire [3:0] wr_add_bin;
+wire [3:0] rd_add_bin;
+wire empty;
+wire wr_rst_n,rd_rst_n;
+
+assign wr_rst_n = rst_n;
+assign rd_rst_n = rst_n;
+
+fifo_mem dut(
+    .rst_n (rst_n),
+    .wr_clk (wr_clk),
+    .rd_clk (rd_clk),
+    .wdata (data_i),
+    .wr_add_bin(wr_add_bin),
+    .rd_add_bin(rd_add_bin),
+    .wr_full(full),
+    .rd_empty(empty),
+    .rdata(data_o)
+  );
+
+wr_ctrl write(
+    .wr_clk(wr_clk),
+    .wr_rst_n(wr_rst_n),
+    .wr_en(wr_en),
+    .rd_add_glay(rd_add_glay),
+    .wr_add_bin(wr_add_bin),
+    .wr_add_glay(wr_add_glay),
+    .wr_full(full)
+  );
+
+rd_ctrl read (
+		.rd_clk(rd_clk),
+    .rd_rst_n(rd_rst_n),
+		.rd_en(rd_en),
+ 		.wr_add_glay(wr_add_glay),
+ 		.rd_add_bin(rd_add_bin),
+ 		.rd_add_glay(rd_add_glay),
+		.rd_empty(empty)
+);
+
+endmodule
+</code></pre>
+<p>{% asset_img 3.png Simulation Result %}</p>
+    </div>
+    <div class="article-footer">
+    </div>
+  </article>
+<section id="comments">
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="next">
+                <a href="//example.org/2020/03/%E7%AE%80%E5%8D%95%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1.html"
+                    title="简单加法器的设计"><span>Newer&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="Catalogue" role="button">
+                    <span>[&nbsp;</span><span>Catalogue</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/canaan-chen" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="//example.org/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2020
+    <div class="publishby">
+         <a href="https://gohugo.io/" target="_blank"> HUGO </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> Pure theme</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="//example.org/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="//example.org/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: '\/\/example.org',
+            CONTENT_URL: '\/\/example.org\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="//example.org/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

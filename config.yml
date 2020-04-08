@@ -1,4 +1,7 @@
 #baseURL: 
+baseURL: "//example.org"
+relativeURLs: true
+uglyURLs: true
 theme: pure
 title: UncleFish's Blog
 defaultContentLanguage: en  # en/zh/...

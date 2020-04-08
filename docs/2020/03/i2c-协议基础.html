@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        I2C 模块设计 | 协议基础 - UncleFish&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。
+" />
+  <meta name="generator" content="Hugo 0.68.3 with theme pure" />
+  <title>I2C 模块设计 | 协议基础 - UncleFish&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="//example.org/css/style.min.a3062b17e67fb6899092f3888ff94f63680d7b023c87421c21885eb1cd1f669e.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="I2C 模块设计 | 协议基础" />
+<meta property="og:description" content="
+I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//example.org/2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80.html" />
+<meta property="article:published_time" content="2020-03-17T12:21:30+08:00" />
+<meta property="article:modified_time" content="2020-03-17T12:21:30+08:00" />
+<meta itemprop="name" content="I2C 模块设计 | 协议基础">
+<meta itemprop="description" content="
+I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。">
+<meta itemprop="datePublished" content="2020-03-17T12:21:30&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-17T12:21:30&#43;08:00" />
+<meta itemprop="wordCount" content="1064">
+
+
+
+<meta itemprop="keywords" content="I2C 学习,IC Design,IC 面试," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="I2C 模块设计 | 协议基础"/>
+<meta name="twitter:description" content="
+I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="//example.org/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Unclefish</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">unclfish | 鱼叔的博客</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Shanghai, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="../../">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="../../posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">Archives</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="../../categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="../../tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">Tags</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>目录在文章的下面，记得点击Catalogue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="//example.org/categories/windows%E7%BE%8E%E5%8C%96.html" class="category-list-link">windows美化</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E4%B8%80%E4%B8%AAic%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB.html" class="category-list-link">一个ic工程师的自我修养</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips.html" class="category-list-link">博客建站tips</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0.html" class="category-list-link">影评文章</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E7%95%99%E5%AD%A6%E8%BF%99%E4%BB%B6%E5%B0%8F%E4%BA%8B.html" class="category-list-link">留学这件小事</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="//example.org/categories/%E9%B1%BC%E5%8F%94%E7%9A%84%E8%A7%86%E7%95%8C.html" class="category-list-link">鱼叔的视界</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/04/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2.html" class="title">如何在windows 体验极致模仿Mac os系统桌面</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-06 00:23:26 &#43;0800 &#43;08" itemprop="datePublished">2020-04-06</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips.html" class="title">hexo Next 主题修改tips</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-04 15:01:48 &#43;0800 &#43;08" itemprop="datePublished">2020-04-04</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95.html" class="title">hexo 博客拓展 | CODING平台托管以及个性化域名</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-30 17:46:38 &#43;0800 &#43;08" itemprop="datePublished">2020-03-30</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1.html" class="title">I2C 模块设计|Master Reg 设计</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-21 20:37:05 &#43;0800 &#43;08" itemprop="datePublished">2020-03-21</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="//example.org/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96.html" class="title">hexo next 主题优化 | 这里可能有你遇到所有问题的答案</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-19 14:19:42 &#43;0800 &#43;08" itemprop="datePublished">2020-03-19</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">Catalogue</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="../../2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80.html"
+    >I2C 模块设计 | 协议基础</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="//example.org/2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80.html" class="article-date">
+  <time datetime="2020-03-17 12:21:30 &#43;0800 &#43;08" itemprop="datePublished">2020-03-17</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="../../categories/%E4%B8%80%E4%B8%AAic%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB/"> 一个IC工程师的自我修养 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="../../tags/i2c-%E5%AD%A6%E4%B9%A0/"> I2C 学习 </a>
+    <a class="article-tag-link" href="../../tags/ic-design/"> IC Design </a>
+    <a class="article-tag-link" href="../../tags/ic-%E9%9D%A2%E8%AF%95/"> IC 面试 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="../../2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80.html#comments"
+            class="article-comment-link">Comments</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 1064words</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 3minutes </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <!-- raw HTML omitted -->
+<p>I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。</p>
+<h2 id="apb-i2c-总线协议">APB I2C 总线协议</h2>
+<h3 id="i2c-uart-spi-接口对比">I2C UART SPI 接口对比</h3>
+<ul>
+<li>UART 异步接口，需要用波特率发生器来进行同步，传输速率较慢</li>
+<li>SPI 同步接口（Master需要给Slave 提供一个同步时钟）四根信号线（clk/MISO/MOSI）</li>
+<li>I2C 慢同步 ， 半双工（SCL SDA）</li>
+</ul>
+<h3 id="i2c-帧结构">I2C 帧结构</h3>
+<p>两根线， SDA-数据线，SCL-时钟线，半双工工作模式。</p>
+<p>结构：</p>
+<ul>
+<li>
+<p>Master：SCL 信号源，控制信息流</p>
+</li>
+<li>
+<p>Slave: 处于等待状态，Master 会通过地址来搜寻所需要的slave，每一个slave都有一个固定的地址，并且地址的方式可以通过固定或者配置来实现。</p>
+</li>
+</ul>
+<h4 id="基本流程">基本流程</h4>
+<ol>
+<li>
+<p>发送起始条件</p>
+</li>
+<li>
+<p>发送接受设备的地址和任务操作；</p>
+</li>
+<li>
+<p>发送或者接受数据</p>
+</li>
+<li>
+<p>接受设备发送相应位 — 应答；</p>
+</li>
+<li>
+<p>发送停止条件</p>
+</li>
+</ol>
+<p>一帧数据8bit， 其中[7:1]为设备地址，而最后一位为数据方向</p>
+<ul>
+<li>
+<p>[7:1] 地址</p>
+</li>
+<li>
+<p><strong>0: 0 — 发送地址，写操作；1 — 接受数据，读操作</strong></p>
+</li>
+</ul>
+<h4 id="起始条件">起始条件</h4>
+<p>当SCL 和SDA是高电平，且 SDA由高电平到低电平切换；</p>
+<p>表示总线上要传输信息；</p>
+<p>总线在起始条件后表示处于忙碌状态；</p>
+<h4 id="停止条件">停止条件</h4>
+<p>当SCL 是高电平时，SDA由低电平向高电平切换时；</p>
+<p>本次通讯结束，总线进入空闲状态。</p>
+<h4 id="位传输要求">位传输要求</h4>
+<p>每传输一个数据就产生一个时钟脉冲。并且在高电平时采样数据</p>
+<h4 id="数据传输结构">数据传输结构</h4>
+<p>数据流： [起始位] [接受数据的地址 6bit] [读写位 ] [数据1, 从7到0，高位先发] [ 应答信号] [数据2, 从7到0，高位先发] [ 应答信号] &hellip; [应答] [停止位]</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/1.png" alt=""></p>
+<h3 id="i2c-的响应机制">I2C 的响应机制</h3>
+<p>Slave 需要在收到数据后给予应答信号，在相应期间，Master需要释放SDA线，而Slave需要将SDA线拉低，表示相应。</p>
+<h4 id="无法响应情况">无法响应情况：</h4>
+<ul>
+<li>如果从机没有响应，则主机要使数据线一直保持高电平，产生一个停止或者重复条件。</li>
+<li>如果从机来不及处理数据，可以一直拉低时钟线，使主机处于等待状态</li>
+</ul>
+<p>SCL 的线与逻辑保证了时钟线上的同步，比如说clk1 先拉低，但是clk2 的低电平还没有到，这时候MOS2 打开状态，整个SCL还是处于低电平状态，只有当所有的clk都到达变低后，线才被拉高，SCL同步机制来保证SCL 读取数据的同步性</p>
+<h4 id="总线仲裁">总线仲裁</h4>
+<p>多个主机使用总线时，当SCL 处于高电平时，根据SDA的电平来进行仲裁；</p>
+<p>规则；当主机需要将总线拉高时，但不能实现 —&gt; 丢失仲裁 —&gt; 退回到设备。</p>
+<h3 id="sample">Sample</h3>
+<p>主机接受流程：</p>
+<ol>
+<li>发送起始标志位</li>
+<li>发送从机地址和读信号</li>
+<li>从机接收到信号发送应答标志，开始发数据</li>
+<li>主机接收到数据发送应答信号开始接受下一个数据</li>
+<li>主机不想接受信号就发送一个NACK信号然后停止</li>
+</ol>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/3.png" alt=""></p>
+    </div>
+    <div class="article-footer">
+    </div>
+  </article>
+<section id="comments">
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="//example.org/2020/03/%E5%A6%82%E4%BD%95%E5%86%99%E5%A5%BD%E4%B8%80%E4%BB%BD%E6%96%87%E4%B9%A6.html" title="如何写好一份文书"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            <li class="next">
+                <a href="//example.org/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97.html"
+                    title="I2C 模块设计| biu 模块"><span>Newer&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="Catalogue" role="button">
+                    <span>[&nbsp;</span><span>Catalogue</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/canaan-chen" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="//example.org/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2020
+    <div class="publishby">
+         <a href="https://gohugo.io/" target="_blank"> HUGO </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> Pure theme</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="//example.org/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="//example.org/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: '\/\/example.org',
+            CONTENT_URL: '\/\/example.org\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="//example.org/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>
