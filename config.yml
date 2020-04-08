@@ -1,6 +1,6 @@
 baseURL: "http://unclefish.ink/my_blog.github.io/"
 #baseURL: "//example.org"
-#relativeURLs: true
+relativeURLs: true
 #uglyURLs: true
 theme: pure
 title: UncleFish's Blog
