@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        hexo next 主题优化 | 这里可能有你遇到所有问题的答案 - UncleFish&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。
+" />
+  <meta name="generator" content="Hugo 0.68.3 with theme pure" />
+  <title>hexo next 主题优化 | 这里可能有你遇到所有问题的答案 - UncleFish&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="/css/style.min.a3062b17e67fb6899092f3888ff94f63680d7b023c87421c21885eb1cd1f669e.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="hexo next 主题优化 | 这里可能有你遇到所有问题的答案" />
+<meta property="og:description" content="
+hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" />
+<meta property="article:published_time" content="2020-03-19T14:19:42+08:00" />
+<meta property="article:modified_time" content="2020-03-19T14:19:42+08:00" />
+<meta itemprop="name" content="hexo next 主题优化 | 这里可能有你遇到所有问题的答案">
+<meta itemprop="description" content="
+hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。">
+<meta itemprop="datePublished" content="2020-03-19T14:19:42&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-19T14:19:42&#43;08:00" />
+<meta itemprop="wordCount" content="3091">
+
+
+
+<meta itemprop="keywords" content="hexo," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="hexo next 主题优化 | 这里可能有你遇到所有问题的答案"/>
+<meta name="twitter:description" content="
+hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">Unclefish</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">unclfish | 鱼叔的博客</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Shanghai, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">Archives</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">Tags</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>目录在文章的下面，记得点击Catalogue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> Categories</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="/categories/windows%E7%BE%8E%E5%8C%96/" class="category-list-link">windows美化</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="/categories/%E4%B8%80%E4%B8%AAic%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB/" class="category-list-link">一个ic工程师的自我修养</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips/" class="category-list-link">博客建站tips</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0/" class="category-list-link">影评文章</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="/categories/%E7%95%99%E5%AD%A6%E8%BF%99%E4%BB%B6%E5%B0%8F%E4%BA%8B/" class="category-list-link">留学这件小事</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="/categories/%E9%B1%BC%E5%8F%94%E7%9A%84%E8%A7%86%E7%95%8C/" class="category-list-link">鱼叔的视界</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="/2020/04/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/" class="title">如何在windows 体验极致模仿Mac os系统桌面</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-06 00:23:26 &#43;0800 &#43;08" itemprop="datePublished">2020-04-06</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/" class="title">hexo Next 主题修改tips</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-04-04 15:01:48 &#43;0800 &#43;08" itemprop="datePublished">2020-04-04</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="/2020/03/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/" class="title">hexo 博客拓展 | CODING平台托管以及个性化域名</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-30 17:46:38 &#43;0800 &#43;08" itemprop="datePublished">2020-03-30</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/" class="title">I2C 模块设计|Master Reg 设计</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-21 20:37:05 &#43;0800 &#43;08" itemprop="datePublished">2020-03-21</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" class="title">hexo next 主题优化 | 这里可能有你遇到所有问题的答案</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-19 14:19:42 &#43;0800 &#43;08" itemprop="datePublished">2020-03-19</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">Catalogue</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/"
+    >hexo next 主题优化 | 这里可能有你遇到所有问题的答案</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" class="article-date">
+  <time datetime="2020-03-19 14:19:42 &#43;0800 &#43;08" itemprop="datePublished">2020-03-19</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips/"> 博客建站tips </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/hexo/"> hexo </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/#comments"
+            class="article-comment-link">Comments</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 3091words</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 7minutes </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/way-4005288_1280.jpg" alt=""></p>
+<p>hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。</p>
+<h2 id="搭建blog的初衷">搭建blog的初衷</h2>
+<p>现在网络平台里有很多可以发表个人看法的平台，比如我派，比如知乎、简书等，那花费功夫搭建自己的个人blog到底有什么意义呢？在我看来，个人博客的意义在于自由性，因为这是你自己的平台，你可以自由地去发表个人想法和文章，而不用担心内容是否迎合具体某个平台的读者。其次，我将个人博客作为自己的一个分享型知识记录，我希望自己的经历或者知识可以给别人带来一点启发和帮助，也许某一个瞬间，当一个人在搜寻相关的知识，参考了你博客的内容并且留言感时，你会发现自己其实在给这个社会做贡献，你在无声中被别人所认可。</p>
+<h2 id="相关的优化">相关的优化</h2>
+<h3 id="前言">前言</h3>
+<ul>
+<li>关于hexo</li>
+</ul>
+<p>我所搭建的blog是基于hexo + GitHub的，因为hexo凭借它轻便快捷的特点，已经成为现在个人博客搭建的主流。我派已经有较为具体的搭建教程文章了，就不再详述搭建步骤。</p>
+<p><a href="https://sspai.com/post/59337">https://sspai.com/post/59337</a></p>
+<ul>
+<li>关于NexT</li>
+</ul>
+<p>NexT 是hexo主题中非常流行的一个，因为它功能齐全，而且插件丰富，成为大多数人的首选主题。当然流行就会出现一个问题，很容易撞车，大家的博客外表都非常相似。不过鱼叔认为博客只是载体，内容才是王道，所以在精力有限的情况下，没必要太纠结于博客外表的华丽，找一个顺眼的主题驻扎即可。本文接下去的内容也主要适用于NexT主题。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200318145642.png" alt="next 主题样式"></p>
+<h3 id="heading"></h3>
+<h3 id="heading-1"></h3>
+<h3 id="菜单栏修改问题">菜单栏修改问题</h3>
+<p>Next在主题的_config.yml文件中提供菜单栏的修改，只要搜索menu就可以找到，通过去除注释即可以在网页上进行渲染。然而鱼叔在修改next中的menu时会发现存在这样的报错 “cannot get %20” &ndash; 无法找到相应的菜单。出现的原因是官方给的代码中多加了一个空格，导致网页无法渲染，个人除了删除注释外，要将“||”前的空格删除不然会导致菜单没法跳转。</p>
+<pre><code class="language-yml">menu:
+  home: /|| home
+  about: /about/|| user
+  tags: /tags/|| tags
+  categories: /categories/|| th
+  archives: /archives/|| archive
+  #schedule: /schedule/ || calendar #官方给的代码 || 前多加了空格
+</code></pre>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200318150930.png" alt=""></p>
+<h3 id="hexo博客出现cannot-gettags-or-categories错误">Hexo博客出现“Cannot GET/tags or categories”错误</h3>
+<p>next提供了标签和分类功能，但是在实现这个功能时常常会遇到&quot;cannot get&rdquo; 的问题，这是因为我们没有对它们进行初始化。具体解决方法如下：</p>
+<ol>
+<li>
+<p>在git bash 中输入以下代码创建相应的page：</p>
+<pre><code class="language-python">hexo new page &quot;tags&quot;
+hexo new page &quot;categories&quot;
+</code></pre>
+</li>
+<li>
+<p>在第一步完成后会在source文件夹中出现tags和categories的文件夹，在各自的文件夹里打开index.md文件进行修改(多加上一个type属性)：</p>
+<pre><code class="language-markdown">title: categories
+date: 2020-03-15 14:19:53
+type: &quot;categories&quot;
+   
+title: tags
+date: 2020-03-15 14:20:32
+type: &quot;tags&quot;
+</code></pre>
+</li>
+</ol>
+<h3 id="底部下一页跳转问题">底部下一页跳转问题</h3>
+<p>鱼叔在建立博客的时候发现底部下一页跳转按钮没有正常显示，如下图</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/fsfsfewf.png" alt=""></p>
+<p>修改方式：</p>
+<p>打开主题 layout/_partials/pagination.swg 进行修改，将“i class”模块删除修改成如下模式(其中prev 和 next可以自定字样)：</p>
+<pre><code class="language-python">{% if page.prev or page.next %}
+  &lt;nav class=&quot;pagination&quot;&gt;
+    {{
+      paginator({
+        prev_text: 'prev',
+        next_text: 'next',
+        mid_size: 1
+      })
+    }}
+  &lt;/nav&gt;
+{% endif %}
+</code></pre>
+<p>修改后结果为下图，实现正常的跳转按钮：</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/ljoifowenfewnf.png" alt=""></p>
+<h3 id="如何让首页文章部分显示">如何让首页文章部分显示</h3>
+<p>next主题默认的是将你的文章全篇显示在自己的首页上，这就会导致一个问题，首页各个文章太长了不利于翻阅，那如何部分显示自己的文章呢？很简单，只要在个人的文章Markdown 中在想要显示的文章部分下面加上代码<code>&lt;!--more&gt;</code>，即可只在首页显示所需的文章部分。</p>
+<h3 id="修改头像问题">修改头像问题</h3>
+<p>将自己的头像复制到blog文件夹中的\themes\next\source\images中覆盖原来的avatar.png 文件即可。</p>
+<h3 id="修改站点icon">修改站点icon</h3>
+<p>当套用完next主题后，个人博客的站点图标会自动为next的logo，作为博主当然不能忍这个logo啦，那怎么修改呢？</p>
+<p>我们打开next的主题配置文件会发现有这样的设定：</p>
+<pre><code class="language-yml">favicon:
+  small: /images/favicon-16x16-next.png
+  medium: /images/favicon-32x32-next.png
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+</code></pre>
+<p>这就可以很清晰地发现去哪里修改了，只要在对应的路径上把原有的图片文件给替换成我们需要的文件就行了。这里给大家提供一个网站用于生成所需的icon同尺寸图像：<a href="https://www.favicon-generator.org/">https://www.favicon-generator.org/</a></p>
+<h3 id="增加阅读时长和字数统计功能">增加阅读时长和字数统计功能</h3>
+<p>next自带阅读时长和字数统计插件，我们所需要做的就是调用这两个工具。首先在主题的配置文件中修改：</p>
+<pre><code class="language-yml">post_wordcount:
+  item_text: true
+  wordcount: true         # 单篇 字数统计
+  min2read: true          # 单篇 阅读时长
+  totalcount: false       # 网站 字数统计
+  separated_meta: true
+</code></pre>
+<p>完成配置后，我们需要安装word-count 插件，在git bash中输入：</p>
+<pre><code>npm i --save hexo-wordcount
+</code></pre>
+<p>完成插件安装后，为了更好的显示，我们可以打开xxx_blog/themes/next/layout/_macro/post.swig ，在对应地方添加字words 和 min。可以通过搜索‘wordcount’ 和 ‘min2read’ 来定位。</p>
+<pre><code> &lt;span title=&quot;{{ __('post.wordcount') }}&quot;&gt;
+                  {{ wordcount(post.content) }} words
+                &lt;/span&gt;
+         
+           &lt;span title=&quot;{{ __('post.min2read') }}&quot;&gt;
+                  {{ min2read(post.content) }} min
+                &lt;/span&gt;
+</code></pre>
+<h3 id="配置搜索功能">配置搜索功能</h3>
+<p>next自带一个搜索功能，可以实现对站内内容的搜索。</p>
+<p>首先需要通过如下命令安装对应的搜索插件：</p>
+<p>然后在全局的配置文件（hexoblog目录下的_config.yml）中，增加配置如下内容：</p>
+<pre><code class="language-yml"># Search Config
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 100
+</code></pre>
+<p>然后在git hash 中加载相应的插件：</p>
+<pre><code>npm install hexo-generator-search --save
+npm install hexo-generator-searchdb --save
+</code></pre>
+<p>打开主题内的配置文件，找到 local_search 属性，配置开启本地搜索功能。</p>
+<pre><code class="language-yml">local_search:
+  enable: true
+  # if auto, trigger search by changing input
+  # if manual, trigger search by pressing enter key or search button
+  trigger: auto
+  # show top n results per article, show all results by setting to -1
+  top_n_per_article: 1
+</code></pre>
+<h3 id="将自己的博客收录到谷歌搜索中">将自己的博客收录到谷歌搜索中</h3>
+<p>为了让自己的博客能被更多人搜索到，自然需要将自己的博客收录到谷歌引擎中，具体的操作如下：</p>
+<ol>
+<li>添加资源</li>
+</ol>
+<p>打开<a href="https://search.google.com/search-console?hl=zh">Google search Console</a>, 在左上角添加资源：</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200318161417.png" alt=""></p>
+<ol start="2">
+<li>网址验证</li>
+</ol>
+<p>选择网址前缀输入自己的博客网址。接下去就是对网站的验证，即证明网站是自己的。google 提供了多种方式进行验证，比较方便的是HTML 文件方式，它会产生一个HTML 文件，你只要将它放到博客source里然后再进行重新部署就行,（tips: 为了避免验证文件被hexo渲染，可以在验证html里添加‘layout：false’ 代码）。鱼叔采用的是HTML标记的方式，具体的方法就是将google提供的代码copy到 xxx_blog/themes/next/layout/_partials/head.swig中，放在头部的<!-- raw HTML omitted -->下面即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200318161752.png" alt=""></p>
+<ol start="3">
+<li>
+<p>增加sitemap</p>
+<p>通过在线网址 <a href="https://www.xml-sitemaps.com/">sitemap</a>生成自己博客的站点地图，然后将站点地图下载下来放到自己博客源public文件夹中（xxx_blog/public）。然后打开 Google console，点开左侧的添加站点地图，输入sitemap.xml，点击提交即可，一般会花2-3天时间进行收录。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200319115742.png" alt=""></p>
+</li>
+</ol>
+<h3 id="增加评论功能">增加评论功能</h3>
+<p>目前比较流行的两种评论系统是Valine 和 Giement，这里主要讲Valine的配置。</p>
+<ol>
+<li>
+<p>注册leancloud， <a href="https://leancloud.cn/dashboard/login.html#/signin">leancloud注册网址</a></p>
+</li>
+<li>
+<p>注册登陆后，访问控制台，创建应用，选择开发版，创建好之后就生成了对应的id和key</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200319121641.png" alt=""></p>
+</li>
+<li>
+<p>在主题配置文件中进行修改</p>
+<pre><code> Valine.
+# You can get your appid and appkey from https://leancloud.cn
+# more info please open https://valine.js.org
+valine:
+  enable: true 
+  appid:   # 填入 App ID
+  appkey:  # 填入 App Key
+  notify: false 
+  verify: false #
+  placeholder: 请在此输入您的留言 # 默认留言框内的文字
+  avatar: &quot;&quot; # 修改留言者头像，具体代码可以参考valine官网
+  guest_info: nick,mail # 默认留言框的头部需要访问者输入的信息
+  pageSize: 10 #默认单页的留言条数
+</code></pre>
+</li>
+<li>
+<p>最后效果</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200319122124.png" alt=""></p>
+</li>
+</ol>
+<h3 id="博客中图床问题">博客中图床问题</h3>
+<p>这里推荐图床神器PicGo, 可以非常快捷地将图片上传到自己所需的云端中，而我采用的是PicGo结合腾讯云COS来搭建在线个人图床。</p>
+<p>相关的教程链接：<a href="https://sspai.com/post/59284">https://sspai.com/post/59284</a></p>
+<h2 id="总结">总结</h2>
+<p>基本上讲完了我搭建博客时遇到的所有问题，我之前看过一个博主写的一句话，“搭建博客就像玩了一个游戏，你的博客就是你的角色，你总是会想方设法地给他升级“。博客优化其实是一个无止境的路，需要耐心和时间，但往往我们会过度的为了美化它而忘记了自己搭建的初衷。好的内容才是一个博客真正的灵魂。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://theme-next.iissnan.com/theme-settings.html">Next 官方指南</a></p>
+    </div>
+    <div class="article-footer">
+    </div>
+  </article>
+<section id="comments">
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/" title="I2C 模块设计| biu 模块"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            <li class="next">
+                <a href="/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/"
+                    title="I2C 模块设计|Master Reg 设计"><span>Newer&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="Catalogue" role="button">
+                    <span>[&nbsp;</span><span>Catalogue</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/canaan-chen" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2020
+    <div class="publishby">
+         <a href="https://gohugo.io/" target="_blank"> HUGO </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> Pure theme</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: '',
+            CONTENT_URL: '\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

@@ -3,13 +3,14 @@ theme: pure
 title: UncleFish's Blog
 defaultContentLanguage: en  # en/zh/...
 footnoteReturnLinkContents: ↩
+publishDir: docs
 hasCJKLanguage: true
 paginate: 7
 enableEmoji: true
 PygmentsCodeFences: false
 googleAnalytics: ""      # UA-XXXXXXXX-X 
 permalinks:
-  posts: /:year/:month/:filename/
+  posts: /:year/:month/:filename/   
 
 taxonomies:
     category : categories
