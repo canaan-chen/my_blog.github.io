@@ -1,4 +1,4 @@
-baseURL: 
+#baseURL: 
 theme: pure
 title: UncleFish's Blog
 defaultContentLanguage: en  # en/zh/...
