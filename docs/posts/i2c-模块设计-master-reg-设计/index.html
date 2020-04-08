@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。">
+
+
+<meta property="og:description" content="本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I2C 模块设计|Master Reg 设计">
+<meta name="twitter:title" content="I2C 模块设计|Master Reg 设计">
+<meta property="og:url" content="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+<meta property="twitter:url" content="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。">
+<meta name="twitter:description" content="本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-03-21T20:37:05">
+  
+  
+    <meta property="article:modified_time" content="2020-03-21T20:37:05">
+  
+  
+  
+    
+      <meta property="article:section" content="一个IC工程师的自我修养">
+    
+  
+  
+    
+      <meta property="article:tag" content="I2C 学习">
+    
+      <meta property="article:tag" content="IC Design">
+    
+      <meta property="article:tag" content="IC 面试">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>I2C 模块设计|Master Reg 设计</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      I2C 模块设计|Master Reg 设计
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-03-21T20:37:05&#43;08:00">
+        
+  March 21, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/%e4%b8%80%e4%b8%aaic%e5%b7%a5%e7%a8%8b%e5%b8%88%e7%9a%84%e8%87%aa%e6%88%91%e4%bf%ae%e5%85%bb">一个IC工程师的自我修养</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/SharedScreenshot.jpg" alt=""></p>
+<h3 id="1-register-分类">1. Register 分类</h3>
+<p>首先我们先对这次设计的寄存器进行一次分类。</p>
+<ul>
+<li>
+<p><strong>预分频寄存器</strong>： 用于存储分频的具体参数。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321185858.png" alt=""></p>
+</li>
+<li>
+<p><strong>控制寄存器</strong>： 用于使能和中断</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190420.png" alt=""></p>
+</li>
+<li>
+<p><strong>数据接收寄存器</strong>：用于接受数据</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190459.png" alt=""></p>
+</li>
+<li>
+<p><strong>数据发送寄存器</strong>：用于传输数据</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190604.png" alt=""></p>
+</li>
+<li>
+<p><strong>状态寄存器</strong>：存储着系统模块的状态，包括应答信号接受状态、数据传输状态等</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190702.png" alt=""></p>
+</li>
+<li>
+<p><strong>命令寄存器</strong>：包含着一系列的指令。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190736.png" alt=""></p>
+</li>
+</ul>
+<h3 id="2-整体模块的输入输出口">2. 整体模块的输入输出口</h3>
+<p>首先我们定义一下整个master的reg的输入输出。</p>
+<p>输入信号：</p>
+<ul>
+<li>来自biu：<code>wr_en</code>, <code>rd_en</code>, <code>byte_en</code>, <code>reg_addr</code>, <code>ipwdata</code>。</li>
+<li>来自byte_ctrl: <code>done</code>(一帧完成信号) <code>i2c_al</code>(仲裁失败信号)、<code>rxack</code>（应答信号）、<code>i2c_busy</code>（busy 标志位）、<code>tip</code>(传输状态信号)、<code>rxr_i</code>(输入数据)</li>
+</ul>
+<p>输出信号：</p>
+<ul>
+<li>发送给biu ：<code>iprdata</code>(读出数据，传输给apb）</li>
+<li>发送给byte_ctrl：<code>core_en</code>(片选信号)、<code>ien_en</code>(中断功能使能信号)、<code>prer</code>(分频数预设置，传输给byte_ctrl)、<code>txr</code>(存储来自apb的数据，并且用于传输给下一级)、<code>sta</code>（启动标志位）、<code>sto</code>（停止标志位）、<code>rd</code>（读信号）、<code>wr</code>（写信号）、<code>ack</code>（响应信号）、<code>irq_flag_d</code>(中断标志位)</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">module</span> ahb_i2c_reg #(
+	<span style="color:#66d9ef">parameter</span> ADDR_SLICE_LHS <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>, <span style="color:#75715e">// 5位输入地址
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">parameter</span> APB_DATA_WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span> <span style="color:#75715e">// 32 位数据宽度
+</span><span style="color:#75715e"></span>)
+(
+	<span style="color:#66d9ef">input</span> 							pclk,
+	<span style="color:#66d9ef">input</span>							prestn,
+	<span style="color:#75715e">// biu 模块连接信号
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							wr_en, <span style="color:#75715e">// 来自biu的写信号
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							rd_en, <span style="color:#75715e">// 来自biu的读信号
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>	[<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]					byte_en,
+	<span style="color:#66d9ef">input</span>	[ADDR_SLICE_LHS<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]	reg_addr,<span style="color:#75715e">// 3位地址
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>	[APB_DATA_WIDTH<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]	ipwdata, <span style="color:#75715e">//来自biu的写数据
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]				iprdata, <span style="color:#75715e">//输出给biu的读数据
+</span><span style="color:#75715e"></span>	
+	<span style="color:#66d9ef">input</span>							done,
+	<span style="color:#66d9ef">input</span>							i2c_al, <span style="color:#75715e">//仲裁失败信号
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							rxack, <span style="color:#75715e">//应答信号
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							i2c_busy, <span style="color:#75715e">//busy 标志位
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							tip,
+	<span style="color:#66d9ef">input</span>	[<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]					rxr_i,
+	
+	<span style="color:#75715e">// 输出控制信号，全都时reg形式，表示控制信号都来自D触发器
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>	[<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]				prer,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						corn_en,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						ien_en,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>	[<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]				txr,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						sta,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						sto,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						rd,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						wr,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						ack,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>						irq_flag_d
+
+);
+</code></pre></div><h3 id="3寄存器地址的分配">3.寄存器地址的分配</h3>
+<h4 id="31-寄存器地址分配">3.1 寄存器地址分配</h4>
+<p>因为APB原地址分配方式为00h, 04h, 08h, 0Ch, 10h和14h， 这种八位的地址通过biu，只取低三位的方式已经转换为3位的地址addr，通过下面的代码实现对对应寄存器的选取。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">assign</span> i2c_cpr_en <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h0</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">//预分频寄存器
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_ctr_en <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h1</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">// 控制寄存器
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_rdr_en <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h2</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span>	<span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">//接受寄存器
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_sr_en  <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h3</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">//状态寄存器
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_tdr_en <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h4</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">//发送数据寄存器
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_cr_en  <span style="color:#f92672">=</span> (reg_addr <span style="color:#f92672">==</span> <span style="color:#ae81ff">3&#39;h5</span>) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>; <span style="color:#75715e">//命令寄存器
+</span></code></pre></div><h4 id="32-biu-读写信号转换">3.2 Biu 读写信号转换</h4>
+<p>将biu 的读写信号转换为寄存器的读写信号。其中i2c_sr_rd， 是状态寄存器的读信号转换，因为该寄存器只能在读的时候清状态，写的时候不可以清除状态。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">assign</span> i2c_cpr_wr <span style="color:#f92672">=</span>  i2c_cpr_en <span style="color:#f92672">&amp;</span> wr_en;
+<span style="color:#66d9ef">assign</span> i2c_ctr_wr <span style="color:#f92672">=</span>	i2c_ctr_en <span style="color:#f92672">&amp;</span> wr_en;
+<span style="color:#66d9ef">assign</span> i2c_rdr_wr <span style="color:#f92672">=</span> i2c_rdr_en <span style="color:#f92672">&amp;</span> wr_en;
+<span style="color:#66d9ef">assign</span> i2c_sr_wr  <span style="color:#f92672">=</span> i2c_sr_en <span style="color:#f92672">&amp;</span> wr_en;
+<span style="color:#66d9ef">assign</span> i2c_tdr_wr <span style="color:#f92672">=</span> i2c_tdr_en <span style="color:#f92672">&amp;</span> wr_en;
+<span style="color:#66d9ef">assign</span> i2c_cr_wr  <span style="color:#f92672">=</span> i2c_cr_en <span style="color:#f92672">&amp;</span> wr_en;
+
+<span style="color:#66d9ef">assign</span> i2c_sr_rd <span style="color:#f92672">=</span> i2c_sr_en <span style="color:#f92672">&amp;</span> rd_en;<span style="color:#75715e">// 读操作信号
+</span></code></pre></div><h3 id="4-预分频寄存器的设计">4. 预分频寄存器的设计</h3>
+<p>预分频寄存器须在该寄存器的写信号<code>i2c_cpr_wr</code>为高时，并且片选信号为低时进行赋值，这是因为预分频必须在接口运作前先完成设定，设定方式为将输入数据<code>ipwdata</code>进行赋值。同时<code>prer</code>保存在<code>i2c_cpr_reg</code> 中。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		prer <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">16&#39;h0000</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		prer <span style="color:#f92672">&lt;=</span> prer_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> prer_pre <span style="color:#f92672">=</span> i2c_cpr_wr <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span>core_en <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">:</span> prer; <span style="color:#75715e">//如果写操作地址选中，并且未使能时，则将APB 上的数据写入。
+</span><span style="color:#75715e">// 设定core_en的目的是，当模块未使能时，要求设定好预分频寄存器，若使能后，则预分频寄存器不能改变。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_cpr_reg <span style="color:#f92672">=</span> {prer};
+</code></pre></div><h3 id="5-控制寄存器">5. 控制寄存器</h3>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200321190420.png" alt=""></p>
+<p>控制寄存器提供两个信号，一个是片选使能信号，另一个是中断使能信号，而这两个信号通过<code>ipwdata</code>的第八位和第七位来实现，即<code>ipwdata[7],ipwdata[6]</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		core_en <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		ien_en	<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		core_en <span style="color:#f92672">&lt;=</span> core_en_pre;
+		ien_en	<span style="color:#f92672">&lt;=</span> ien_en_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> core_en_pre <span style="color:#f92672">=</span> i2c_ctr_wr <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">7</span>] <span style="color:#f92672">:</span> core_en; <span style="color:#75715e">// 第七位来赋值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> ien_en_pre  <span style="color:#f92672">=</span> i2c_ctr_wr <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">6</span>] <span style="color:#f92672">:</span> ien_en;
+
+<span style="color:#66d9ef">assign</span> i2c_ctr_reg <span style="color:#f92672">=</span> {core_en,ien_en,<span style="color:#ae81ff">6</span><span style="color:#ae81ff">&#39;b0</span>};
+</code></pre></div><h3 id="6-发送寄存器">6. 发送寄存器</h3>
+<p>发送寄存器会将收到的<code>ipwdata</code>数据保存发送给下一级，因为传输过程中实际只用到八位传播，所以最后<code>txr</code>中存储的仅为<code>ipwdata</code>中的低八位。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">// txr 数据发送寄存器
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		txr <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">8</span><span style="color:#ae81ff">&#39;b0</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		txr <span style="color:#f92672">&lt;=</span> txr_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> txr_pre <span style="color:#f92672">=</span> i2c_tdr_wr <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">:</span> txr; <span style="color:#75715e">//是否要输入16位数据？
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_tdr_reg <span style="color:#f92672">=</span> {<span style="color:#ae81ff">8</span><span style="color:#ae81ff">&#39;b0</span>, txr};
+</code></pre></div><h3 id="7-接收寄存器">7. 接收寄存器</h3>
+<p>接受寄存器功能和发送寄存器类似，负责存储读取到的数据<code>rxr_i</code>。其中<code>done</code>信号表示一帧信号已经完成传输，当<code>done</code>信号为高时，才可以进行数据存储。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ ( <span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		rxr <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">8</span><span style="color:#ae81ff">&#39;b0</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		rxr <span style="color:#f92672">&lt;=</span> rxr_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> rxr_pre <span style="color:#f92672">=</span> done <span style="color:#f92672">?</span> rxr_i <span style="color:#f92672">:</span> rxr; <span style="color:#75715e">//将byte control模块读取到的数据输入，用于给apb模块读取
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_rdr_reg <span style="color:#f92672">=</span> {<span style="color:#ae81ff">8&#39;h0</span>,rxr};
+</code></pre></div><h3 id="8-控制寄存器">8. 控制寄存器</h3>
+<p>控制寄存器中含有较多的输出控制信号：<code>sta</code>（启动标志位）、<code>sto</code>（停止标志位）、<code>rd</code>（读信号）、<code>wr</code>（写信号）、<code>ack</code>（响应信号）。</p>
+<p>当done信号传过来时，表示一帧数据发送完毕，控制信号都清零，这时候如果要赋值进行控制，则统一根据输入的<code>ipwdata[7:4]</code>来进行（选7到4是因为spec规定的，个人设计可以进行修改），<code>iack</code> 信号作为备用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		sta <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		sto	<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		rd	<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		wr	<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		ack	<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		iack <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		sta <span style="color:#f92672">&lt;=</span> sta_pre;
+		sto	<span style="color:#f92672">&lt;=</span> sto_pre;
+		rd	<span style="color:#f92672">&lt;=</span> rd_pre;
+		wr	<span style="color:#f92672">&lt;=</span> wr_pre;
+		ack	<span style="color:#f92672">&lt;=</span> ack_pre; 
+		iack <span style="color:#f92672">&lt;=</span> iack_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> sta_pre <span style="color:#f92672">=</span> done <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span> <span style="color:#f92672">:</span> i2c_cr_wr <span style="color:#f92672">&amp;</span> ien_en <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">7</span>] <span style="color:#f92672">:</span> sta ; <span style="color:#75715e">//如果done信号穿过来，表示已经完成，则start标志清零。实现物理清零操作
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> sto_pre <span style="color:#f92672">=</span> done <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span> <span style="color:#f92672">:</span> i2c_cr_wr <span style="color:#f92672">&amp;</span> ien_en <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">6</span>] <span style="color:#f92672">:</span> sto ; 
+<span style="color:#66d9ef">assign</span> rd_pre <span style="color:#f92672">=</span> done <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span> <span style="color:#f92672">:</span> i2c_cr_wr <span style="color:#f92672">&amp;</span> ien_en <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">5</span>] <span style="color:#f92672">:</span> rd ;
+<span style="color:#66d9ef">assign</span> wr_pre <span style="color:#f92672">=</span> done <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span> <span style="color:#f92672">:</span> i2c_cr_wr <span style="color:#f92672">&amp;</span> ien_en <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">4</span>] <span style="color:#f92672">:</span> wr ;
+<span style="color:#66d9ef">assign</span> ack_pre <span style="color:#f92672">=</span> i2c_cr_wr <span style="color:#f92672">?</span> ipwdata[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+<span style="color:#66d9ef">assign</span> iack_pre <span style="color:#f92672">=</span> i2c_cr_wr <span style="color:#f92672">?</span> ipwdata [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+</code></pre></div><h3 id="9-状态寄存器">9. 状态寄存器</h3>
+<p>状态寄存器用于接收状态信息，该状态寄存器只允许读而不可以写。总共这几个状态：<code>done</code>(一帧完成信号) <code>i2c_al</code>(仲裁失败信号)、<code>rxack</code>（应答信号）、<code>i2c_busy</code>（busy 标志位），以及发出中断状态<code>irq_flag_d</code>。</p>
+<p>其中中断状态，如果对该寄存器进行读操作时，会将中断寄存器清零，不会实现中断。相应的，中断发生条件为中断flag 为1 并且中断信号使能为1。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> prestn) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>prestn) <span style="color:#66d9ef">begin</span>
+		rxack_d			<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		i2c_busy_d		<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		al_d			<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		tip_d			<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+		irq_flag_d		<span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>;
+	<span style="color:#66d9ef">end</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+		rxack_d 	<span style="color:#f92672">&lt;=</span> 	rxack;
+		i2c_busy_d	<span style="color:#f92672">&lt;=</span>	i2c_busy;
+		al_d		<span style="color:#f92672">&lt;=</span> 	i2c_al <span style="color:#f92672">|</span> (al_d <span style="color:#f92672">&amp;</span> <span style="color:#f92672">~</span>sta); <span style="color:#75715e">// i2c_al 是仲裁失败信号
+</span><span style="color:#75715e"></span>		tip_d		<span style="color:#f92672">&lt;=</span> (wr <span style="color:#f92672">|</span> rd);		
+		irq_flag_d <span style="color:#f92672">&lt;=</span> irq_flag_pre;
+	<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">assign</span> irq_flag_pre <span style="color:#f92672">=</span> i2c_sr_rd <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span> <span style="color:#f92672">:</span> irq_flag <span style="color:#f92672">&amp;</span> ien_en <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span> <span style="color:#f92672">:</span> irq_flag_d ; <span style="color:#75715e">// 读的时候会把flag 给清掉
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">assign</span> i2c_cr_reg <span style="color:#f92672">=</span> {<span style="color:#ae81ff">8</span><span style="color:#ae81ff">&#39;b0</span>
+					,rack_d
+					,i2c_busy_d
+					,al_d
+					,tip_d
+					,irq_flag_d
+					};
+<span style="color:#66d9ef">assign</span> irq_flag <span style="color:#f92672">=</span> (done <span style="color:#f92672">|</span> i2c_al); <span style="color:#75715e">//当完成一帧数据的传输或者发生总裁错位的时候产生中断标志位。
+</span></code></pre></div><h3 id="10-检测寄存器情况">10. 检测寄存器情况</h3>
+<p>为了方便检测寄存器里的数据情况，通过以下的组合逻辑，在选中地址之后对访问的寄存器的数据进行存储。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">always</span> @ (<span style="color:#f92672">*</span>) <span style="color:#66d9ef">begin</span>
+	iprdata <span style="color:#f92672">=</span> {<span style="color:#ae81ff">32</span>{<span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>}};
+	<span style="color:#66d9ef">if</span> (i2c_cpr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_cpr_reg;
+	<span style="color:#66d9ef">if</span> (i2c_ctr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_ctr_reg;
+	<span style="color:#66d9ef">if</span> (i2c_rdr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_rdr_reg;
+	<span style="color:#66d9ef">if</span> (i2c_sr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_sr_reg;
+	<span style="color:#66d9ef">if</span> (i2c_tdr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_tdr_reg;
+	<span style="color:#66d9ef">if</span> (i2c_cr_en <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b1</span>) iprdata [<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> i2c_cr_reg;
+<span style="color:#66d9ef">end</span>
+</code></pre></div>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/i2c-%E5%AD%A6%E4%B9%A0/">I2C 学习</a>
+
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/ic-design/">IC Design</a>
+
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/ic-%E9%9D%A2%E8%AF%95/">IC 面试</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/" data-tooltip="hexo 博客拓展 | CODING平台托管以及个性化域名">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" data-tooltip="hexo next 主题优化 | 这里可能有你遇到所有问题的答案">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/" data-tooltip="hexo 博客拓展 | CODING平台托管以及个性化域名">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" data-tooltip="hexo next 主题优化 | 这里可能有你遇到所有问题的答案">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-master-reg-%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-master-reg-%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-master-reg-%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1\/';
+          
+            this.page.identifier = '\/posts\/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

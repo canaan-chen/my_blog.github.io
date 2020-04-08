@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="
+「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」">
+
+
+<meta property="og:description" content="
+「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo 博客拓展 | CODING平台托管以及个性化域名">
+<meta name="twitter:title" content="hexo 博客拓展 | CODING平台托管以及个性化域名">
+<meta property="og:url" content="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+<meta property="twitter:url" content="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="
+「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」">
+<meta name="twitter:description" content="
+「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-03-30T17:46:38">
+  
+  
+    <meta property="article:modified_time" content="2020-03-30T17:46:38">
+  
+  
+  
+    
+      <meta property="article:section" content="博客建站tips">
+    
+  
+  
+    
+      <meta property="article:tag" content="hexo">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>hexo 博客拓展 | CODING平台托管以及个性化域名</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      hexo 博客拓展 | CODING平台托管以及个性化域名
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-03-30T17:46:38&#43;08:00">
+        
+  March 30, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/%e5%8d%9a%e5%ae%a2%e5%bb%ba%e7%ab%99tips">博客建站tips</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><img src="https://cdn.sspai.com/2020/03/30/3a7e7aec64856772c43f0efe5ea2d1b3.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1" alt="img"></p>
+<p>「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」</p>
+<h2 id="初衷">初衷</h2>
+<p>一般大家的hexo博客都是基于GIthub 进行托管，但是这个托管存在一个问题就是国内网络访问会比较慢，同时GitHub对百度搜索的爬虫存在限制，也就是说你的博客如果基于Github可能就没法被百度搜索给收录，这时候咱们就需要另一个代码托管平台来应对国内的网络访问。笔者所采用的平台是CODING,有点类似Github的一个国内代码托管平台。</p>
+<p>关于域名，纯粹是个人的喜好问题了。为了让自己的博客更加个性化，一个独特的域名自然是很有必要的，再加上国内购买域名的方式很方便（笔者便通过阿里云购买了域名），所以有兴趣的博主也可以考虑。</p>
+<h2 id="coding-平台代码托管">CODING 平台代码托管</h2>
+<h3 id="coding-的注册">CODING 的注册</h3>
+<p>CODING 作为一个国内代码托管平台，同时支持git操作。首先在<a href="https://coding.net/company/about">coding.net</a> 进行注册。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200326192154.png" alt=""></p>
+<h3 id="将ssh-公钥配置到coding上">将ssh 公钥配置到CODING上</h3>
+<p>一般之前用GitHub部署博客时已经生成了ssh密钥，如果没有生成则从第一步开始，如果已经生成了则从第二步开始。</p>
+<ol>
+<li>
+<p>生成ssh密钥</p>
+<p>打开gitbash，输入 <code>ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;</code> ，然后一直回车（建议用同样的邮箱注册CODING 和 GitHub）。</p>
+</li>
+<li>
+<p>复制公钥</p>
+<p>打开C盘下user 文件夹中的.ssh文件夹，再打开其中的id_rsa.pub，将其中的公钥进行复制。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200326193749.png" alt=""></p>
+<p>打开CODING个人设置，点击左侧的SSH公钥，选择添加新的公钥，将之前复制的所有内容进行粘贴即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200326194043.png" alt=""></p>
+</li>
+<li>
+<p>公钥配置测试</p>
+<p>为了测试公钥添加是否完成，我们需要在本地的GitBash里进行测试。打开GitBash，输入</p>
+<pre><code>ssh -T git@e.coding.net
+</code></pre><p>然后会询问是否继续，一直输入yes即可，最后会显示success的标志。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200326204311.png" alt=""></p>
+</li>
+</ol>
+<h3 id="创建coding-仓库">创建CODING 仓库</h3>
+<p>在自己的项目管理平台上新建一个代码托管项目。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/1.gif" alt=""></p>
+<p>在创建完项目后，会在右侧看到相关的HTTP协议的链接，将它进行复制用于后面的代码上传。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200326201646.png" alt=""></p>
+<h3 id="部署博客">部署博客</h3>
+<ol>
+<li>
+<p>在我们的blog文件夹中打开_config.yml文件，在deploy下面添加CODING平台的链接(链接为上一步复制的链接)，注意后方逗号后的master是分支的命名格式。</p>
+<pre><code>deploy:
+  type: git
+  repo:
+    github: https://github.com/xxx/xxx.github.io.git,master
+    coding: https://e.coding.net/xxx/xxx.git,master
+   
+</code></pre></li>
+<li>
+<p>在source文件中新建一个Staticfile（用于生成静态网页），注意大小写以及没有后缀的特点。可以通过gitbash输入以下代码来生成，也可通过新建一个txt文件然后修改名字来实现。</p>
+<pre><code>cd source
+touch Staticfile
+</code></pre></li>
+<li>
+<p>在Git Bash中输入<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code> 来进行部署。</p>
+</li>
+</ol>
+<h3 id="生成静态网页">生成静态网页</h3>
+<p>刚生成的项目仓库中是不存在生成静态网页的选项的，因此我们要将这个按钮打开。打开方式也很简单，点击项目栏下方的“项目设置”，选择“通知设置”，将其中的“构建与部属”打开，然后就可以发现项目栏中会出现“构建静态网页&quot;选项，通过这个选项便可以生成我们所需的博客了，并且CODING平台会提供相应的网站链接（注意，静态网页生成需要实名注册）。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/2.gif" alt=""></p>
+<h2 id="域名个性化">域名个性化</h2>
+<p>域名就是一个网站的名字，通过网域名称系统（DNS）来实现对具体IP地址的访问。为了保证域名的唯一性，所有的域名都需要通过域名注册商实现注册，笔者便是通过阿里云实现注册，接下去的教程也是基于阿里云。</p>
+<h3 id="购买域名">购买域名</h3>
+<ol>
+<li>
+<p>在<a href="https://wanwang.aliyun.com/">阿里云万网</a>上查询想要的域名。</p>
+</li>
+<li>
+<p>将域名加入清单并结算。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330121817.png" alt=""></p>
+</li>
+<li>
+<p>创建信息模板。（注意信息模板中要求实名认证，并且推荐使用身份证，会比较快捷，笔者曾用护照去实名花费了大量的审核时间）</p>
+</li>
+<li>
+<p>付钱。</p>
+</li>
+</ol>
+<h3 id="解析">解析</h3>
+<p>当购买完域名后，需要在域名的控制平台里加入我们想要这个域名映射到的实际网站。点击“解析”操作进入域名控制台。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330122544.png" alt=""></p>
+<p>在域名控制台中加入解析记录，主要填的内容为<code>记录类型</code>、<code>主机记录</code>、<code>解析线路</code>、<code>记录值</code>。具体填写如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">记录类型		主机记录	解析线路	记录值
+CNAME			www		   境外		github 博客的网址
+CNAME			www		   默认  		前面CODING平台产生的静态网页的网址
+A               @          默认       185.199.108.153
+A               @          默认       185.199.109.153
+A               @          默认       185.199.110.153
+A               @          默认       185.199.111.153
+</code></pre></div><p>其中将GitHub部署的博客和CODING部署的博客分别解析线路改成境外和境内，是为了让境外用户和境内用户能更加快捷的访问你的博客而不受地域限制。</p>
+<p>注意，针对CODING 平台还需要加一个A记录类型的记录，记录值为CODING Page 的IP。CODING Page 的IP 可通过在gitbash中输入<code>ping 你的名字.coding.me</code> 来获得。</p>
+<h3 id="购买免费的ssl证书">购买免费的SSL证书</h3>
+<p>阿里云为个人的域名提供免费的SSL证书，具体方法如下：</p>
+<ol>
+<li>
+<p>打开个人控制台选择配置SSL证书</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330150227.png" alt=""></p>
+</li>
+<li>
+<p>然后在购买证书中选择免费版（个人）DV 即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330150341.png" alt=""></p>
+</li>
+</ol>
+<h3 id="github本地配置">GitHub本地配置</h3>
+<ol>
+<li>
+<p>新建CNAME文件</p>
+<p>进入自己博客的source文件夹中，新建一个<code>CNAME</code>文件，注意没有后缀。然后打开该文件，在文件中加入自己的域名，注意不需要加http或者www，比如笔者的博客为unclefish.ink，直接输入unclefish.ink 保存即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330124648.png" alt=""></p>
+</li>
+<li>
+<p>部署</p>
+<p>在GitBash 中输入 <code>hexo g</code>、<code>hexo d</code>进行部署，然后打开自己GitHub博客仓库，打开设置查看GitHub Pages 中的<code>Custom domain</code> 是否是自己的博客新域名。</p>
+</li>
+</ol>
+<h3 id="coding-部署新域名">CODING 部署新域名</h3>
+<p>在CODING平台的静态网页部署中选择设置，然后在自定义域名中加了自己的域名后保存即可（注意要求要在阿里云的DNS中先加入CNAME 导向CODING的静态网页）。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/3.gif" alt=""></p>
+<p>修改完域名后，网站的浏览数会重新开始计数，所以算是一种弊端吧。</p>
+<h2 id="将博客重新收录到谷歌和百度中">将博客重新收录到谷歌和百度中</h2>
+<h3 id="谷歌收录">谷歌收录</h3>
+<p>由于换了域名，所以需要重新加入收录库，在控制台中增加收录网页，然后在验证中选择dns验证，这时候谷歌会提供一个TXT，将这个TXT复制到阿里云的DNS解析记录中，通过验证后即可被收录到谷歌中（注意验证后要提交<a href="https://sspai.com/post/59568">站点网页</a>）。新增记录格式如下：</p>
+<pre><code>记录类型		主机记录	解析线路	记录值
+TXT				@			默认		google-xxx(复制来的值)
+</code></pre><p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330161605.png" alt=""></p>
+<h3 id="百度收录">百度收录</h3>
+<h4 id="dns-验证">DNS 验证</h4>
+<p>因为GitHub不允许百度的爬虫，所以这里我们通过将百度的搜索导向我们在CODING平台上建立的静态网页。</p>
+<ol>
+<li>
+<p>在百度的<a href="https://ziyuan.baidu.com/site/index#/">站点网站</a>中添加自己的博客。</p>
+</li>
+<li>
+<p>选择CNAME验证方式，这时候百度会要求将<code>xxxxx.你的博客</code>使用CNAME解析到ziyuan.baidu.com, 这时候我们要将前面的xxxx给复制下来。</p>
+</li>
+<li>
+<p>打开阿里云DNS解析工具，新增如下记录，注意xxxx为之前复制的值。</p>
+<pre><code>记录类型		主机记录	解析线路	记录值
+CNAME			xxxx		默认		ziyuan.baidu.com
+</code></pre></li>
+<li>
+<p>在百度站点平台点击验证即可。</p>
+</li>
+</ol>
+<h4 id="提交站点文件">提交站点文件</h4>
+<p>在gitbash中输入<code> npm install hexo-generator-baidu-sitemap --save</code> 来加载插件，然后在博客的_config.yml 文件中添加以下代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">baidusitemap</span>:
+  <span style="color:#66d9ef">path</span>: baidusitemap.xml
+</code></pre></div><p>最后通过<code>hexo g; hexo d </code>实现部署，会发现在public文件夹中多了一个baidusitemap.xml 文件，这就是百度所要抓取的站点文件。随后在百度链接提交处选择sitemap输入自己的文件路径即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200330165828.png" alt=""></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/hexo/">hexo</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/" data-tooltip="hexo Next 主题修改tips">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/" data-tooltip="I2C 模块设计|Master Reg 设计">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/" data-tooltip="hexo Next 主题修改tips">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/" data-tooltip="I2C 模块设计|Master Reg 设计">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-%25E5%258D%259A%25E5%25AE%25A2%25E6%258B%2593%25E5%25B1%2595%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-%25E5%258D%259A%25E5%25AE%25A2%25E6%258B%2593%25E5%25B1%2595%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-%25E5%258D%259A%25E5%25AE%25A2%25E6%258B%2593%25E5%25B1%2595%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95\/';
+          
+            this.page.identifier = '\/posts\/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

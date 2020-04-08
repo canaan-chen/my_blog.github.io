@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。">
+
+
+<meta property="og:description" content="下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I2C 模块设计| biu 模块">
+<meta name="twitter:title" content="I2C 模块设计| biu 模块">
+<meta property="og:url" content="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+<meta property="twitter:url" content="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。">
+<meta name="twitter:description" content="下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-03-17T20:36:24">
+  
+  
+    <meta property="article:modified_time" content="2020-03-17T20:36:24">
+  
+  
+  
+    
+      <meta property="article:section" content="一个IC工程师的自我修养">
+    
+  
+  
+    
+      <meta property="article:tag" content="I2C 学习">
+    
+      <meta property="article:tag" content="IC Design">
+    
+      <meta property="article:tag" content="IC 面试">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>I2C 模块设计| biu 模块</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      I2C 模块设计| biu 模块
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-03-17T20:36:24&#43;08:00">
+        
+  March 17, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/%e4%b8%80%e4%b8%aaic%e5%b7%a5%e7%a8%8b%e5%b8%88%e7%9a%84%e8%87%aa%e6%88%91%e4%bf%ae%e5%85%bb">一个IC工程师的自我修养</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/1584102093634.png" alt=""></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">module</span> apb_i2c_biu #(
+	<span style="color:#66d9ef">parameter</span> ADDR_SLICE_LHS <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>, <span style="color:#75715e">// addres [4:0] 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">parameter</span> APB_DATA_WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>
+)
+(
+<span style="color:#75715e">// signals connect to APB module 
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							pclk,
+	<span style="color:#66d9ef">input</span>							presetn, <span style="color:#75715e">// reset
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span> 							psel, <span style="color:#75715e">// select signal
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>	[ADDR_SLICE_LHS<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>] 	paddr, <span style="color:#75715e">// 5bit addres
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>							pwrite,
+	<span style="color:#66d9ef">input</span> 							penable,
+	<span style="color:#66d9ef">input</span>	[APB_DATA_WIDTH<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>]	pwdata,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span> [APB_DATA_WIDTH<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>] prdata,
+<span style="color:#75715e">//signals connect to register module
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">input</span>	[<span style="color:#ae81ff">15</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]					iprdata, <span style="color:#75715e">// ?
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">output</span>							wr_en,
+									rd_en,
+	<span style="color:#66d9ef">output</span>	[ADDR_SLICE_LHS<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]	reg_addr, <span style="color:#75715e">// ahb addres searching
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">output</span>	[<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]					byte_en,
+	<span style="color:#66d9ef">output</span>	<span style="color:#66d9ef">reg</span>	[<span style="color:#ae81ff">31</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]				ipwdata
+);
+</code></pre></div><h3 id="写操作">写操作</h3>
+<p>当AHB实现写操作时，要求片选信号（psel）为高，使能信号（penable）为高，写信号（pwrite）为高，当满足这三个条件时，biu信号输出写使能（wr_en）高，来驱动后面的reg。当ahb数据到来时可直接存到输出reg（ipwdata）中。</p>
+<ul>
+<li>
+<p>写操作代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">assign</span> wr_en <span style="color:#f92672">=</span> psel <span style="color:#f92672">&amp;</span> penable <span style="color:#f92672">&amp;</span> pwrite; <span style="color:#75715e">// 写信号的要求
+</span><span style="color:#75715e"></span>  
+<span style="color:#66d9ef">always</span> @(pwdata) <span style="color:#66d9ef">begin</span>
+  ipwdata <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span><span style="color:#ae81ff">&#39;b0</span>;
+  ipwdata [APB_DATA_WIDTH<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> pwdata[APB_DATA_WIDTH<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]; <span style="color:#75715e">//apb总线上的数据每次发生变化，就将数据传输到输出reg中
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">end</span>
+  
+</code></pre></div></li>
+</ul>
+<h3 id="读操作">读操作</h3>
+<p>实现读操作时，要求在AHB读操作信号（pwrite 为低时）提前将reg中的数据传到输出数据缓存区prdata中。</p>
+<ul>
+<li>
+<p>关于读信号的判断</p>
+<p>biu 输出读信号（rd_en）的条件为：pwrite 为低，psel为高，penable 为高。但是为了保证在读操作实行时提前将数据准备好，rd_en 在penable为低便使能，具体代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">assign</span> rd_en <span style="color:#f92672">=</span> psel <span style="color:#f92672">&amp;</span> <span style="color:#f92672">!</span>penable <span style="color:#f92672">&amp;</span> <span style="color:#f92672">!</span>pwrite; <span style="color:#75715e">// 读信号要提前产生，因为要求把数据提前放到APB总线上
+</span><span style="color:#75715e"></span>  
+<span style="color:#75715e">// 数据传输过程
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> pclk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> presetn) <span style="color:#66d9ef">begin</span>
+  <span style="color:#66d9ef">if</span>(presetn <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>) <span style="color:#66d9ef">begin</span>
+      prdata <span style="color:#f92672">&lt;=</span> {APB_DATA_WIDTH{<span style="color:#ae81ff">1</span><span style="color:#ae81ff">&#39;b0</span>}}; <span style="color:#75715e">//apb 读寄存器中的数据清零
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">begin</span>
+      <span style="color:#66d9ef">if</span> (rd_en) <span style="color:#66d9ef">begin</span>
+          prdata <span style="color:#f92672">&lt;=</span> {<span style="color:#ae81ff">16</span><span style="color:#ae81ff">&#39;b0</span>,iprdata}; <span style="color:#75715e">// 将读入的数据保存到apb reg中
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div></li>
+</ul>
+<h3 id="具体的代码链接如下">具体的代码链接如下：</h3>
+<p><a href="https://github.com/canaan-chen/I2C-IP-design/blob/master/apb_i2c_biu.v">Biu Ctrl Code</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/i2c-%E5%AD%A6%E4%B9%A0/">I2C 学习</a>
+
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/ic-design/">IC Design</a>
+
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/ic-%E9%9D%A2%E8%AF%95/">IC 面试</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" data-tooltip="hexo next 主题优化 | 这里可能有你遇到所有问题的答案">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" data-tooltip="I2C 模块设计 | 协议基础">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" data-tooltip="hexo next 主题优化 | 这里可能有你遇到所有问题的答案">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" data-tooltip="I2C 模块设计 | 协议基础">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-biu-%25E6%25A8%25A1%25E5%259D%2597%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-biu-%25E6%25A8%25A1%25E5%259D%2597%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2Fi2c-%25E6%25A8%25A1%25E5%259D%2597%25E8%25AE%25BE%25E8%25AE%25A1-biu-%25E6%25A8%25A1%25E5%259D%2597%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97\/';
+          
+            this.page.identifier = '\/posts\/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

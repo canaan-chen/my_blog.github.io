@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="
+本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。">
+
+
+<meta property="og:description" content="
+本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo Next 主题修改tips">
+<meta name="twitter:title" content="hexo Next 主题修改tips">
+<meta property="og:url" content="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+<meta property="twitter:url" content="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="
+本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。">
+<meta name="twitter:description" content="
+本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-04-04T15:01:48">
+  
+  
+    <meta property="article:modified_time" content="2020-04-04T15:01:48">
+  
+  
+  
+    
+      <meta property="article:section" content="博客建站tips">
+    
+  
+  
+    
+      <meta property="article:tag" content="hexo">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>hexo Next 主题修改tips</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      hexo Next 主题修改tips
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-04-04T15:01:48&#43;08:00">
+        
+  April 4, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/%e5%8d%9a%e5%ae%a2%e5%bb%ba%e7%ab%99tips">博客建站tips</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><img src="https://cdn.sspai.com/2020/03/19/dcc16be00b1827f820c01bfe47c4d29d.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1" alt="img"></p>
+<p>本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。</p>
+<h2 id="1-如何让文章置顶">1. 如何让文章置顶</h2>
+<h3 id="博文置顶">博文置顶</h3>
+<p>在gitbash里输入以下代码加入置顶插件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#960050;background-color:#1e0010">$</span> npm uninstall hexo<span style="color:#f92672">-</span>generator<span style="color:#f92672">-</span>index <span style="color:#f92672">--</span>save
+<span style="color:#960050;background-color:#1e0010">$</span> npm install hexo<span style="color:#f92672">-</span>generator<span style="color:#f92672">-</span>index<span style="color:#f92672">-</span>pin<span style="color:#f92672">-</span>top <span style="color:#f92672">--</span>save
+</code></pre></div><p>然后在文章的<code>Front-matter</code>中加上<code>top:true</code>即可实现置顶。</p>
+<h3 id="置顶标志体现">置顶标志体现</h3>
+<p>实现置顶后如果没有置顶标志就会表现得很奇怪，这时候我们需要添加相关的置顶标志来实现。</p>
+<p>打开/blog/theme/next/layout/_macro 中的<code>post.swig</code> 文件，定位到 <code>&lt;div class=&quot;post-block&quot;&gt;</code>下，添加如下代码：</p>
+<pre><code>{% if post.top %}
+            &lt;i class=&quot;fa fa-thumb-tack&quot;&gt;&lt;/i&gt;
+            &lt;font color=7D26CD&gt;置顶&lt;/font&gt;
+            &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;
+ {% endif %}
+</code></pre><h2 id="2-增加博客背景图片">2. 增加博客背景图片</h2>
+<ol>
+<li>在<code>themes/next/source/css/_custom/custom.styl</code>中添加CSS样式</li>
+</ol>
+<p>文件位置：hexo/themes/next/source/css/_custom/custom.styl// 背景图片</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">body</span>::<span style="color:#a6e22e">before</span> {
+    <span style="color:#66d9ef">background-image</span>: url(<span style="color:#e6db74">https://背景图.jpg</span>);
+    <span style="color:#66d9ef">background-repeat</span>: <span style="color:#66d9ef">no-repeat</span>;
+    <span style="color:#66d9ef">background-size</span>: <span style="color:#66d9ef">cover</span>;
+    <span style="color:#66d9ef">background-position</span>: <span style="color:#ae81ff">50</span><span style="color:#66d9ef">%</span> <span style="color:#ae81ff">50</span><span style="color:#66d9ef">%</span>;
+    <span style="color:#66d9ef">content</span>: <span style="color:#e6db74">&#34; &#34;</span>;
+    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">fixed</span>;
+    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>;
+    <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>;
+    <span style="color:#66d9ef">top</span>: <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">-2</span>;
+}
+</code></pre></div><p>2）jquery-backstretch插件</p>
+<p>文件位置：hexo/themes/next/layout/_layout.swig</p>
+<pre><code>&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
++  &lt;script&gt;
++  $(&quot;body&quot;).backstretch(&quot;https://背景图.jpg&quot;);
++  &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>加入到文件最后面前面即可。</p>
+<h2 id="3-博客内容透明度调整">3. 博客内容透明度调整</h2>
+<p>NexT主题的博客文章均是不透明的，下面的方法可以使博客内容透明化：</p>
+<p>在<code>blog/themes/next/source/css/_custom/custom.styl</code>中添加以下内容：</p>
+<pre><code>// page-opacity
+
+.content-wrap {
+  opacity: 0.85;
+}
+
+.sidebar {
+  opacity: 0.85;
+}
+
+.header-inner {
+  background: rgba(255,255,255,0.85);
+}
+
+.popup {
+  opacity: 0.9;
+}
+</code></pre><p>其中<code>content-wrap</code>是文章内容的透明度设置，<code>sidebar</code>是侧边框的透明度设置，<code>header-inner</code>是菜单栏的透明度设置，<code>popup</code>是搜索框（<code>local-search</code>）的透明度设置。</p>
+<p>可以修改上面的数字来自定义透明度。</p>
+<p>注意其中<code>header-inner</code>不能使用<code>opacity</code>进行配置。
+因为<code>header-inner</code>包含<code>header.swig</code>中的所有内容。
+若使用<code>opacity</code>进行配置，子结点会出很多问题</p>
+<h2 id="4-增加近期文章list">4. 增加近期文章list</h2>
+<pre><code>{% if theme.recent_posts %}
+    &lt;div class=&quot;links-of-blogroll motion-element {{ &quot;links-of-blogroll-&quot; + theme.recent_posts_layout  }}&quot;&gt;
+      &lt;div class=&quot;links-of-blogroll-title&quot;&gt;
+        &lt;!-- modify icon to fire by szw --&gt;
+        &lt;i class=&quot;fa fa-history fa-{{ theme.recent_posts_icon | lower }}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+        {{ theme.recent_posts_title }}
+      &lt;/div&gt;
+      &lt;ul class=&quot;links-of-blogroll-list&quot;&gt;
+        {% set posts = site.posts.sort('-date') %}
+        {% for post in posts.slice('0', '5') %}
+          &lt;li&gt;
+            &lt;a href=&quot;{{ url_for(post.path) }}&quot; title=&quot;{{ post.title }}&quot; target=&quot;_blank&quot;&gt;{{ post.title }}&lt;/a&gt;
+          &lt;/li&gt;
+        {% endfor %}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+{% endif %}
+</code></pre><p>将此代码贴在<code>next/layout/_macro/sidebar.swig</code>中的<code>if theme.links</code>对应的<code>endif</code>后面，就ok了，是不是很简单。。。。
+为了配置方便，在主题的<code>_config.yml</code>中添加了几个变量，如下：</p>
+<pre><code>recent_posts_title: 近期文章
+recent_posts_layout: block
+recent_posts: true
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/hexo/">hexo</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/" data-tooltip="如何在windows 体验极致模仿Mac os系统桌面">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/" data-tooltip="hexo 博客拓展 | CODING平台托管以及个性化域名">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/" data-tooltip="如何在windows 体验极致模仿Mac os系统桌面">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/" data-tooltip="hexo 博客拓展 | CODING平台托管以及个性化域名">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-next-%25E4%25B8%25BB%25E9%25A2%2598%25E4%25BF%25AE%25E6%2594%25B9tips%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-next-%25E4%25B8%25BB%25E9%25A2%2598%25E4%25BF%25AE%25E6%2594%25B9tips%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2Fhexo-next-%25E4%25B8%25BB%25E9%25A2%2598%25E4%25BF%25AE%25E6%2594%25B9tips%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips\/';
+          
+            this.page.identifier = '\/posts\/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="这篇文章主要讲解了如何设计一个异步Fifo。">
+
+
+<meta property="og:description" content="这篇文章主要讲解了如何设计一个异步Fifo。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异步fifo的设计">
+<meta name="twitter:title" content="异步fifo的设计">
+<meta property="og:url" content="https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+<meta property="twitter:url" content="https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="这篇文章主要讲解了如何设计一个异步Fifo。">
+<meta name="twitter:description" content="这篇文章主要讲解了如何设计一个异步Fifo。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-03-15T17:58:18">
+  
+  
+    <meta property="article:modified_time" content="2020-03-15T17:58:18">
+  
+  
+  
+    
+      <meta property="article:section" content="一个IC工程师的自我修养">
+    
+  
+  
+    
+      <meta property="article:tag" content="IC Design">
+    
+      <meta property="article:tag" content="FIFO">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>异步fifo的设计</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      异步fifo的设计
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-03-15T17:58:18&#43;08:00">
+        
+  March 15, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/%e4%b8%80%e4%b8%aaic%e5%b7%a5%e7%a8%8b%e5%b8%88%e7%9a%84%e8%87%aa%e6%88%91%e4%bf%ae%e5%85%bb">一个IC工程师的自我修养</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>这篇文章主要讲解了如何设计一个异步Fifo。</p>
+<h2 id="1-资料">1. 资料</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/42991844">异步FIFO设计（1）</a></p>
+<p><a href="https://blog.csdn.net/deng_d1/article/details/50179677">异步FIFO设计原理及Verliog源代码_网络_deng_d1的博客-CSDN博客</a></p>
+<h2 id="2-原理介绍">2. 原理介绍</h2>
+<p>{% asset_img 1.png %}</p>
+<h3 id="21-使用fifo的情况">2.1 使用FIFO的情况</h3>
+<ul>
+<li>两个不同时钟域进行数据传输时可以用FIFO</li>
+<li>对于不同宽度的数据接口也可以用FIFO， 例如单片机8位输出，而DSP 16位数据输入。</li>
+</ul>
+<h3 id="22-fifo的相关参数">2.2 FIFO的相关参数</h3>
+<ul>
+<li>FIFO的宽度：表示FIFO进行一次读写操作的数据位。</li>
+<li>FIFO的深度：指的是FIFO能存储多少个N位的数据，N为宽度。</li>
+<li>满标志：FIFO已满或将要满时由FIFO的状态电路送出的一个信号，以阻止FIFO的写操作继续向FIFO中写数据而造成溢出（overflow）</li>
+<li>空标志：FIFO已空或将要空时由FIFO的状态电路送出的一个信号，以阻止FIFO的读操作继续从FIFO中读出数据而造成无效数据的读出（underflow）。</li>
+<li>读时钟：读数据所遵循的时钟。</li>
+<li>写时钟：写操作所需要遵循的时钟。</li>
+<li>读指针：指向下一个读出地址。读完后自动加1</li>
+<li>写指针：指向下一个写入地址，写完后自动加1</li>
+</ul>
+<h3 id="23-空满状态的判断">2.3 空满状态的判断</h3>
+<p><a href="https://blog.csdn.net/zyn1347806/article/details/79626452">FIFO空满判断与地址转换的思考_网络_zyn1347806的博客-CSDN博客</a></p>
+<p><a href="https://www.cnblogs.com/xh13dream/p/9265042.html">异步fifo设计（1）</a></p>
+<ul>
+<li>用格雷码来作地址判断（多引入一位作位判断，比如设计深度为8，宽度为8的异步FIFO，设计其指针位数为4,即 n+1）
+<ul>
+<li>当最高位和次高位相同时，其余位相同认为是读空</li>
+<li>当最高位和次高位不同时，其余位相同认为是写满</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-读空标志位的产生">2.4 读空标志位的产生</h3>
+<p><a href="https://www.sohu.com/a/114158723_458015">异步FIFO设计(非常详细，图文并茂，值得一看！）</a></p>
+<p>FIFO中存在两种指针，rd_ptr 和 wr_ptr。只有两种状态下FIFO才会为空：</p>
+<ul>
+<li>系统复位，读写指针都被清空。</li>
+<li>读出速度大于写入速度，读地址赶上写地址。</li>
+</ul>
+<p>空标志位的产生要在读时钟域里完成，这样不至于FIFO为空时，而空标志位还没有发生，但是可能发生FIFO里已经有数据了，但是空标志位还是没有被撤销，不过就算在最坏的情况下，空标志撤销也只是滞后3个周期（因为会需要时钟的同步，经过两级触发器）。还有一种情况，就是空标志比较逻辑检测到读地址和写地址相同后，紧接着发生写操作，导致写地址加1，由于同步模块的滞后性，导致没法及时更新写地址，会产生一个虚假的空信号，称作“虚空”。</p>
+<h3 id="25-读满标志位的产生">2.5 读满标志位的产生</h3>
+<p>读满状态可以理解为，读地址超写地址一圈，两个地址仍然在同一个地方，这时候引入指示位来进行区别和判断。</p>
+<p>读满状态判断：</p>
+<ol>
+<li>
+<p><strong>最高位相异，因为两个指针速度不同， 写超前于读。</strong></p>
+</li>
+<li>
+<p><strong>出去最高位，次高位取反后两者相同。比如：写指针已经走了一圈了跑到3，此时写指针：1110，而读指针第一次走到3，指针数值为：0010。⇒ 发现最高位和次高位均不同，表示满状态。</strong></p>
+</li>
+<li>
+<p><strong>相应的，如果最高位和次高位均相同则表示空状态。</strong></p>
+<p>{% asset_img Untitled.png %}</p>
+</li>
+</ol>
+<h2 id="3代码的实现">3.代码的实现</h2>
+<p>这里以一个8x8的fifo作为案例来进行代码的设计，之后再做一个fifo的封装实现自定义化模块。</p>
+<h3 id="31-格雷码转换">3.1 格雷码转换</h3>
+<p>需要用Gray Code来实现地址，从而降低亚稳态。</p>
+<p>基本的转换关系：</p>
+<ul>
+<li>二进制转格雷码：
+<ul>
+<li>G[ n-1 ] = b[ n - 1 ] （最高位）</li>
+<li>G [i] = b [ i ] ^ b [i + 1]</li>
+</ul>
+</li>
+<li>格雷码转换二进制：
+<ul>
+<li>b[n-1] = G [n-1]</li>
+<li>b [ i ] = G [ i ]^ G [i+1] ^ &hellip;&hellip;^ G[ n - 1] = G [ i ] ^ b[ i + 1 ]</li>
+</ul>
+</li>
+</ul>
+<p>EDA link: <a href="https://www.edaplayground.com/x/4QrG">https://www.edaplayground.com/x/4QrG</a></p>
+<pre><code>//sample of Binary to Gray
+module B2G (
+		B,   // B input binary
+		G    // output Gray
+);
+input wire [3:0] B;
+output reg [3:0] G;
+always @(*) begin // 使用always时，要加@
+		G [3] = B [3];
+		G [2] = B[2] ^ B[3];
+		G [1] = B[1] ^ B[2];
+		G [0] = B[0] ^ B[1];
+end
+endmodule
+
+//TestBench
+module tb ();
+  reg [3:0] B,G;
+  reg [2:0] i;
+//  reg clk;
+  initial begin
+    $dumpfile(&quot;dump.vcd&quot;);// dump waive
+    $dumpvars(1, tb);
+    B = 0;
+    i = 0;
+    #10;
+    B =1; #10;
+   for (i=0; i&lt;=7; i = i+1) begin
+		   B = B +1;
+			  #10;
+   end
+  end
+
+  B2G dut(
+    .B(B),
+    .G(G)
+  );
+endmodule
+</code></pre><h3 id="32-写模块控制">3.2 写模块控制</h3>
+<p>写模块的功能</p>
+<ul>
+<li>写信号来的时候，写指针地址加1</li>
+<li>将wr 指针和rd 指针进行比较，看是否写满了。其中注意的是，满状态要将读指针同步到写时钟里，需要进行同步后再比较。</li>
+</ul>
+<p>输入信号：wr_clk, wr_en, wr_rst_n, rd_add_glay</p>
+<p>输出信号：wr_add_bin, wr_add_glay</p>
+<p>EDA link <a href="https://www.edaplayground.com/x/5565">https://www.edaplayground.com/x/5565</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#75715e">// Code your design here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;B2G.v&#34;</span>
+<span style="color:#66d9ef">module</span> wr_ctrl (
+		<span style="color:#66d9ef">input</span> wr_clk,
+        <span style="color:#66d9ef">input</span> wr_rst_n,
+		<span style="color:#66d9ef">input</span> wr_en,
+ 		 <span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay,
+ 		 <span style="color:#66d9ef">output</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_bin,
+ 		 <span style="color:#66d9ef">output</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay,
+		<span style="color:#66d9ef">output</span> <span style="color:#66d9ef">reg</span> wr_full
+);
+
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_bin_r;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay_r;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay_r1;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay_r2;
+<span style="color:#75715e">// 地址增加模块
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> wr_clk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> wr_rst_n <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">posedge</span> wr_en) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (wr_en) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">// 所有的操作都是在始能下开始的
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>wr_rst_n) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">//复位操作
+</span><span style="color:#75715e"></span>		wr_add_bin_r <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">//地址指针复位
+</span><span style="color:#75715e"></span>		wr_full <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>wr_full) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">//不满情况下
+</span><span style="color:#75715e"></span>       wr_add_bin_r <span style="color:#f92672">&lt;=</span> wr_add_bin_r <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;<span style="color:#75715e">// 地址加1
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e">//调用格雷码转换
+</span><span style="color:#75715e"></span>B2G wr_B2G(
+	.B (wr_add_bin_r),
+	.G (wr_add_glay_r)
+);
+
+<span style="color:#75715e">//判断满状态，如果格雷码首两位和读地址互异，则满
+</span><span style="color:#75715e">//同步读地址
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">always</span> @(<span style="color:#66d9ef">posedge</span> wr_clk) <span style="color:#66d9ef">begin</span>
+	{rd_add_glay_r2,rd_add_glay_r1} <span style="color:#f92672">&lt;=</span> {rd_add_glay_r1, rd_add_glay} ;
+<span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">always</span> @(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">begin</span>
+    wr_full <span style="color:#f92672">=</span> (rd_add_glay_r2[<span style="color:#ae81ff">3</span>]<span style="color:#f92672">^</span>wr_add_glay_r[<span style="color:#ae81ff">3</span>]) <span style="color:#f92672">&amp;&amp;</span> (rd_add_glay_r2[<span style="color:#ae81ff">2</span>]<span style="color:#f92672">^</span>wr_add_glay_r[<span style="color:#ae81ff">2</span>]) <span style="color:#f92672">&amp;&amp;</span> (rd_add_glay_r2[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> wr_add_glay_r [<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>]); <span style="color:#75715e">// 首两位互异，且后几位相同
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">assign</span> wr_add_bin <span style="color:#f92672">=</span> wr_add_bin_r;
+<span style="color:#66d9ef">assign</span> wr_add_glay <span style="color:#f92672">=</span> wr_add_glay_r;
+
+<span style="color:#66d9ef">endmodule</span>
+</code></pre></div><h3 id="33-读模块控制">3.3 读模块控制</h3>
+<p>功能代码和写模块相似，只是空标志的判断条件不同，要求两个地址完全相同才可以。</p>
+<p>EDA Link:  <a href="https://www.edaplayground.com/x/3tfy">https://www.edaplayground.com/x/3tfy</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#75715e">// Code your design here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;B2G.v&#34;</span>
+<span style="color:#66d9ef">module</span> rd_ctrl (
+		<span style="color:#66d9ef">input</span> rd_clk,
+     <span style="color:#66d9ef">input</span> rd_rst_n,
+		<span style="color:#66d9ef">input</span> rd_en,
+ 		 <span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay,
+ 		 <span style="color:#66d9ef">output</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_bin,
+ 		 <span style="color:#66d9ef">output</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay,
+		<span style="color:#66d9ef">output</span> <span style="color:#66d9ef">reg</span> rd_empty
+);
+
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_bin_r;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay_r;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay_r1;
+<span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay_r2;
+<span style="color:#75715e">// 地址增加模块
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">always</span> @ (<span style="color:#66d9ef">posedge</span> rd_clk <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">negedge</span> rd_rst_n <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">posedge</span> rd_en) <span style="color:#66d9ef">begin</span>
+	<span style="color:#66d9ef">if</span> (rd_en) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">// 所有的操作都是在始能下开始的
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rd_rst_n) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">//复位操作
+</span><span style="color:#75715e"></span>		rd_add_bin_r <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">//地址指针复位
+</span><span style="color:#75715e"></span>		rd_empty <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>;
+	<span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rd_empty) <span style="color:#66d9ef">begin</span> <span style="color:#75715e">//不满情况下
+</span><span style="color:#75715e"></span>       rd_add_bin_r <span style="color:#f92672">&lt;=</span> rd_add_bin_r <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;<span style="color:#75715e">// 地址加1
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e">//调用格雷码转换
+</span><span style="color:#75715e"></span>B2G rd_B2G(
+	.B (rd_add_bin_r),
+	.G (rd_add_glay_r)
+);
+
+<span style="color:#75715e">//判断满状态，如果格雷码首两位和读地址互异，则满
+</span><span style="color:#75715e">//同步读地址
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">always</span> @(<span style="color:#66d9ef">posedge</span> rd_clk) <span style="color:#66d9ef">begin</span>
+	{wr_add_glay_r2,wr_add_glay_r1} <span style="color:#f92672">&lt;=</span> {wr_add_glay_r1, wr_add_glay} ;
+<span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">always</span> @(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">begin</span>
+    rd_empty <span style="color:#f92672">=</span> wr_add_glay_r2 <span style="color:#f92672">==</span> rd_add_glay_r ; <span style="color:#75715e">// 地址相同时，表示读空
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">assign</span> rd_add_bin <span style="color:#f92672">=</span> rd_add_bin_r;
+<span style="color:#66d9ef">assign</span> rd_add_glay <span style="color:#f92672">=</span> rd_add_glay_r;
+
+<span style="color:#66d9ef">endmodule</span>
+</code></pre></div><h3 id="34-fifo-mem-ctrl">3.4 FIFO Mem Ctrl</h3>
+<p>主体部分会建立一个FIFO的mem，并且输入数据和读出数据。</p>
+<p>控制模块功能简介：</p>
+<ul>
+<li>根据地址将对应的数据存储或者读取</li>
+<li>EDA link <a href="https://www.edaplayground.com/x/bWf">https://www.edaplayground.com/x/bWf</a></li>
+</ul>
+<p>Bug ： 因为弄错数组的写法，导致出现了bug reg [wordsize : 0] array_name [0 : arraysize]; 其中第二个是0-size，例如需要生成8x8 size的数组，应该为 reg [7:0] mem [0:7] 不是 reg [7:0] mem [2:0] ;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#66d9ef">module</span> fifo_mem (
+		<span style="color:#66d9ef">input</span> wr_clk,
+		<span style="color:#66d9ef">input</span> rd_clk,
+  <span style="color:#66d9ef">input</span> rst_n,
+  <span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wdata,
+  <span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_bin, <span style="color:#75715e">//写地址
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_bin, <span style="color:#75715e">//读地址
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">input</span> wr_full,
+		<span style="color:#66d9ef">input</span> rd_empty,
+	<span style="color:#66d9ef">output</span> <span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rdata
+
+);
+
+<span style="color:#75715e">// 建立一个8x8的reg
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] fifo_mem [<span style="color:#ae81ff">0</span><span style="color:#f92672">:</span><span style="color:#ae81ff">7</span>]; <span style="color:#75715e">//建立一个宽度为8深度也为8的mem
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add; <span style="color:#75715e">//内部3位地址
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add; <span style="color:#75715e">//内部3位地址
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] i;
+  
+<span style="color:#66d9ef">assign</span> wr_add <span style="color:#f92672">=</span> wr_add_bin [<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>];
+<span style="color:#66d9ef">assign</span> rd_add <span style="color:#f92672">=</span> rd_add_bin [<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>];
+
+<span style="color:#75715e">// 初始化
+</span><span style="color:#75715e"></span>  
+  <span style="color:#66d9ef">always</span> @(<span style="color:#66d9ef">negedge</span> rst_n) <span style="color:#66d9ef">begin</span>
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rst_n) <span style="color:#66d9ef">begin</span>
+      <span style="color:#66d9ef">for</span> (i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>; i<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">7</span> ; i <span style="color:#f92672">=</span> i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">begin</span>
+        fifo_mem [i] <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0</span>;
+      <span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">end</span>
+      
+<span style="color:#66d9ef">always</span> @(<span style="color:#66d9ef">posedge</span> wr_clk) <span style="color:#66d9ef">begin</span>
+  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>wr_full) <span style="color:#66d9ef">begin</span>
+			fifo_mem [wr_add] <span style="color:#f92672">&lt;=</span> wdata;
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">always</span> @(<span style="color:#66d9ef">posedge</span> rd_clk) <span style="color:#66d9ef">begin</span>
+		<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rd_empty) 
+			rdata <span style="color:#f92672">&lt;=</span> fifo_mem [rd_add] ;
+<span style="color:#66d9ef">end</span>
+
+
+<span style="color:#66d9ef">endmodule</span>
+</code></pre></div><h3 id="35-top-level-各模块集成">3.5 Top level 各模块集成</h3>
+<p>EDA link : <a href="https://www.edaplayground.com/x/6Mfp">https://www.edaplayground.com/x/6Mfp</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#75715e">// Code your design here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;fifo_mem.v&#34;</span>
+<span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;wr_ctrl.v&#34;</span>
+<span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;rd_ctrl.v&#34;</span>
+<span style="color:#66d9ef">`include</span> <span style="color:#e6db74">&#34;B2G.v&#34;</span>
+
+
+<span style="color:#66d9ef">module</span> fifo(
+	<span style="color:#66d9ef">input</span> wr_clk,
+	<span style="color:#66d9ef">input</span> rd_clk,
+	<span style="color:#66d9ef">input</span> rst_n,
+	<span style="color:#66d9ef">input</span> wr_en,
+	<span style="color:#66d9ef">input</span> rd_en,
+	<span style="color:#66d9ef">input</span> [<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] data_i,
+  	<span style="color:#66d9ef">output</span> <span style="color:#66d9ef">reg</span> [<span style="color:#ae81ff">7</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] data_o,
+  	<span style="color:#66d9ef">output</span> <span style="color:#66d9ef">reg</span> full, <span style="color:#75715e">// 用于控制数据的输入
+</span><span style="color:#75715e"></span>);
+
+<span style="color:#66d9ef">wire</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_glay;
+<span style="color:#66d9ef">wire</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_glay;
+<span style="color:#66d9ef">wire</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] wr_add_bin;
+<span style="color:#66d9ef">wire</span> [<span style="color:#ae81ff">3</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>] rd_add_bin;
+<span style="color:#66d9ef">wire</span> empty;
+<span style="color:#66d9ef">wire</span> wr_rst_n,rd_rst_n;
+
+<span style="color:#66d9ef">assign</span> wr_rst_n <span style="color:#f92672">=</span> rst_n;
+<span style="color:#66d9ef">assign</span> rd_rst_n <span style="color:#f92672">=</span> rst_n;
+
+fifo_mem dut(
+    .rst_n (rst_n),
+    .wr_clk (wr_clk),
+    .rd_clk (rd_clk),
+    .wdata (data_i),
+    .wr_add_bin(wr_add_bin),
+    .rd_add_bin(rd_add_bin),
+    .wr_full(full),
+    .rd_empty(empty),
+    .rdata(data_o)
+  );
+
+wr_ctrl write(
+    .wr_clk(wr_clk),
+    .wr_rst_n(wr_rst_n),
+    .wr_en(wr_en),
+    .rd_add_glay(rd_add_glay),
+    .wr_add_bin(wr_add_bin),
+    .wr_add_glay(wr_add_glay),
+    .wr_full(full)
+  );
+
+rd_ctrl read (
+		.rd_clk(rd_clk),
+    .rd_rst_n(rd_rst_n),
+		.rd_en(rd_en),
+ 		.wr_add_glay(wr_add_glay),
+ 		.rd_add_bin(rd_add_bin),
+ 		.rd_add_glay(rd_add_glay),
+		.rd_empty(empty)
+);
+
+<span style="color:#66d9ef">endmodule</span>
+</code></pre></div><p>{% asset_img 3.png Simulation Result %}</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/ic-design/">IC Design</a>
+
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/fifo/">FIFO</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/%E7%AE%80%E5%8D%95%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/" data-tooltip="简单加法器的设计">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/%E7%AE%80%E5%8D%95%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/" data-tooltip="简单加法器的设计">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25BC%2582%25E6%25AD%25A5fifo%25E7%259A%2584%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25BC%2582%25E6%25AD%25A5fifo%25E7%259A%2584%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25BC%2582%25E6%25AD%25A5fifo%25E7%259A%2584%25E8%25AE%25BE%25E8%25AE%25A1%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1\/';
+          
+            this.page.identifier = '\/posts\/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

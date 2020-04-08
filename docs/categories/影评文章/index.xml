@@ -1,158 +1,35 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>影评文章 on UncleFish&#39;s Blog</title>
-    <link>/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0/</link>
-    <description>Recent content in 影评文章 on UncleFish&#39;s Blog</description>
+    <title>影评文章 on Hugo tranquilpeak theme</title>
+    <link>https://example.org/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0/</link>
+    <description>Recent content in 影评文章 on Hugo tranquilpeak theme</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
     <lastBuildDate>Mon, 16 Mar 2020 12:14:29 +0800</lastBuildDate>
     
-        <atom:link href="/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.org/categories/%E5%BD%B1%E8%AF%84%E6%96%87%E7%AB%A0/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>About</title>
-      <link>/about/about/</link>
-      <pubDate>Wed, 08 Apr 2020 10:36:45 +0800</pubDate>
-      
-      <guid>/about/about/</guid>
-      <description>hello 大家好，我是UF，新时代的数字搬砖工。 今天是2020年3月14日，我创建了自己的博客，虽然刚开始很简陋，但是这是我打造个人品牌的第一步。这</description>
-    </item>
-    
-    <item>
-      <title>如何在windows 体验极致模仿Mac os系统桌面</title>
-      <link>/2020/04/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/</link>
-      <pubDate>Mon, 06 Apr 2020 00:23:26 +0800</pubDate>
-      
-      <guid>/2020/04/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/04/06/31487db0bb60db90a4640f623c417063.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>hexo Next 主题修改tips</title>
-      <link>/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/</link>
-      <pubDate>Sat, 04 Apr 2020 15:01:48 +0800</pubDate>
-      
-      <guid>/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/03/19/dcc16be00b1827f820c01bfe47c4d29d.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;本文讲述了四个next优化方案：文章置顶、添加博客背景、调整文章内容透明度、增加近期文章list。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>hexo 博客拓展 | CODING平台托管以及个性化域名</title>
-      <link>/2020/03/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/</link>
-      <pubDate>Mon, 30 Mar 2020 17:46:38 +0800</pubDate>
-      
-      <guid>/2020/03/hexo-%E5%8D%9A%E5%AE%A2%E6%8B%93%E5%B1%95/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/03/30/3a7e7aec64856772c43f0efe5ea2d1b3.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;「hello 大家好，我是鱼叔。在上一篇讲完关于next的优化tips之后，这一篇我们来聊一下CODING平台的代码托管以及如何个性化你自己的域名」&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>I2C 模块设计|Master Reg 设计</title>
-      <link>/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/</link>
-      <pubDate>Sat, 21 Mar 2020 20:37:05 +0800</pubDate>
-      
-      <guid>/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-master-reg-%E8%AE%BE%E8%AE%A1/</guid>
-      <description>&lt;p&gt;本章节讲述APB regesiter 模块。register 处于biu和byte_ctrl 之间，它的作用在于收取到来自biu模块的读写信号进行读写操作，之后转换成相应的控制信号对后面模块进行控制，同时byte_ctrl 和bit_ctrl 会产生相应的状态信号反馈给reg模块。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>hexo next 主题优化 | 这里可能有你遇到所有问题的答案</title>
-      <link>/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</link>
-      <pubDate>Thu, 19 Mar 2020 14:19:42 +0800</pubDate>
-      
-      <guid>/2020/03/hexo-next-%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://image-1301586523.cos.ap-shanghai.myqcloud.com/way-4005288_1280.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;hello 大家好，我是鱼叔。我最近花了两天左右的时间基于hexo和next搭建了个人的blog（传输门），中途遇到了一堆的bug以及相关的优化问题，想写这篇文章记录下来给想搭建blog的你一个参考。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>I2C 模块设计| biu 模块</title>
-      <link>/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/</link>
-      <pubDate>Tue, 17 Mar 2020 20:36:24 +0800</pubDate>
-      
-      <guid>/2020/03/i2c-%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1-biu-%E6%A8%A1%E5%9D%97/</guid>
-      <description>&lt;p&gt;下方结构图为I2C接口中的master模块示意图，这个章节主要用于讲述其中的biu模块。根据结构图可知，biu模块存在的地址在于APB interface 和APB register 之间，它的目的在于将复杂的AHB 接口信号转换为单周期的读写信号，这样方便对后面的reg进行操作。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>I2C 模块设计 | 协议基础</title>
-      <link>/2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/</link>
-      <pubDate>Tue, 17 Mar 2020 12:21:30 +0800</pubDate>
-      
-      <guid>/2020/03/i2c-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/</guid>
-      <description>&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;I2C 总线是很实用的一个总线协议，也是IC 面试时可以讲出点东西的一个素材。鱼叔最近在学习I2C的IP 设计，并且会不断更新，整理成学习笔记分享在我的博客中，希望大家能有所收获。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>如何写好一份文书</title>
-      <link>/2020/03/%E5%A6%82%E4%BD%95%E5%86%99%E5%A5%BD%E4%B8%80%E4%BB%BD%E6%96%87%E4%B9%A6/</link>
-      <pubDate>Mon, 16 Mar 2020 12:23:49 +0800</pubDate>
-      
-      <guid>/2020/03/%E5%A6%82%E4%BD%95%E5%86%99%E5%A5%BD%E4%B8%80%E4%BB%BD%E6%96%87%E4%B9%A6/</guid>
-      <description>&lt;p&gt;在留学申请中，文书会起很大的作用，一份好的文书会给你的教授留下比较好的印象，并且你可以在文书中弥补很多东西，比如如果GPA不理想，可以在文书里解释原因，比一个死板的成绩单会好用很多。那怎样写一份文书，或者说怎么修改一份文书，中介给我的文书我不知道好坏该怎么办？&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>如何挑一杯不错的速溶咖啡</title>
-      <link>/2020/03/%E5%A6%82%E4%BD%95%E6%8C%91%E4%B8%80%E6%9D%AF%E4%B8%8D%E9%94%99%E7%9A%84%E9%80%9F%E6%BA%B6%E5%92%96%E5%95%A1/</link>
-      <pubDate>Mon, 16 Mar 2020 12:21:43 +0800</pubDate>
-      
-      <guid>/2020/03/%E5%A6%82%E4%BD%95%E6%8C%91%E4%B8%80%E6%9D%AF%E4%B8%8D%E9%94%99%E7%9A%84%E9%80%9F%E6%BA%B6%E5%92%96%E5%95%A1/</guid>
-      <description>&lt;p&gt;在现磨咖啡当道的今天，速溶咖啡似乎已经进入了咖啡鄙视链的最底端，秉着「存在即合理」的理念，咱们来聊一聊速溶咖啡，以及如何选取一款不错的速溶咖啡。&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>另类反战片 - 《JoJo Rabbit》</title>
-      <link>/2020/03/%E5%8F%A6%E7%B1%BB%E5%8F%8D%E6%88%98%E7%89%87-jojo-rabbit/</link>
+      <link>https://example.org/posts/%E5%8F%A6%E7%B1%BB%E5%8F%8D%E6%88%98%E7%89%87-jojo-rabbit/</link>
       <pubDate>Mon, 16 Mar 2020 12:14:29 +0800</pubDate>
       
-      <guid>/2020/03/%E5%8F%A6%E7%B1%BB%E5%8F%8D%E6%88%98%E7%89%87-jojo-rabbit/</guid>
+      <guid>https://example.org/posts/%E5%8F%A6%E7%B1%BB%E5%8F%8D%E6%88%98%E7%89%87-jojo-rabbit/</guid>
       <description>&lt;p&gt;近期我去电影院看了一部蛮有意思的反战片《Jojo Rabbit》(中文翻译：少年乔乔的异想世界)，在这里推荐给大家。刚开始看到这个电影名的时候，我以为只是给孩子看的小朋友电影，很难和战争片联系在一起，但是在看电影的时候才发现这是一部以儿童视角拍的反战片, 充满着满满的黑色幽默。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>《1917》— 我在里面看到了战争</title>
-      <link>/2020/03/1917-%E6%88%91%E5%9C%A8%E9%87%8C%E9%9D%A2%E7%9C%8B%E5%88%B0%E4%BA%86%E6%88%98%E4%BA%89/</link>
+      <link>https://example.org/posts/1917-%E6%88%91%E5%9C%A8%E9%87%8C%E9%9D%A2%E7%9C%8B%E5%88%B0%E4%BA%86%E6%88%98%E4%BA%89/</link>
       <pubDate>Mon, 16 Mar 2020 12:07:34 +0800</pubDate>
       
-      <guid>/2020/03/1917-%E6%88%91%E5%9C%A8%E9%87%8C%E9%9D%A2%E7%9C%8B%E5%88%B0%E4%BA%86%E6%88%98%E4%BA%89/</guid>
+      <guid>https://example.org/posts/1917-%E6%88%91%E5%9C%A8%E9%87%8C%E9%9D%A2%E7%9C%8B%E5%88%B0%E4%BA%86%E6%88%98%E4%BA%89/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;在第77届金球奖颁奖典礼上，导演萨姆·门德斯凭借《1917》爆冷获得最佳导演奖和最佳剧情奖。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/01/15/38a9232caabaf678a382008c1ce67ee9.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>新加坡留学 | 关于我为什么要去新加坡留学</title>
-      <link>/2020/03/%E5%85%B3%E4%BA%8E%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%8E%BB%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%95%99%E5%AD%A6/</link>
-      <pubDate>Mon, 16 Mar 2020 12:04:57 +0800</pubDate>
-      
-      <guid>/2020/03/%E5%85%B3%E4%BA%8E%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%8E%BB%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%95%99%E5%AD%A6/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/01/06/dc023de5af1660bdac144351c46171bf.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;提起留学，大家的刻板印象基本上都是贵，富二代才能去。事实上留学这件事确实是需要一定的经济投入，但这并不表明只有富二代才能去，现在的工薪家庭也是可以支撑起一个孩子的留学花费。就我个人的经历来言，我的家庭并不富裕，父母都是工薪阶层，但是他们依然支持我去海外攻读硕士学位，我对他们非常的感激。至于我为什么选择新加坡去留学，我会分成以下几个点为大家讲解。（注意：这篇文章的目的不是为了鼓励大家去留学，而是希望给那些有想法想出国的同学做一个参考）&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>简单加法器的设计</title>
-      <link>/2020/03/%E7%AE%80%E5%8D%95%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/</link>
-      <pubDate>Sun, 15 Mar 2020 23:43:26 +0800</pubDate>
-      
-      <guid>/2020/03/%E7%AE%80%E5%8D%95%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/</guid>
-      <description>&lt;p&gt;前言 | 加法器是逻辑设计里比较基础的一个模块，
-本文将会就加法器的原理，设计方法和电路仿真来进行讲述。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>异步fifo的设计</title>
-      <link>/2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/</link>
-      <pubDate>Sun, 15 Mar 2020 17:58:18 +0800</pubDate>
-      
-      <guid>/2020/03/%E5%BC%82%E6%AD%A5fifo%E7%9A%84%E8%AE%BE%E8%AE%A1/</guid>
-      <description>&lt;p&gt;这篇文章主要讲解了如何设计一个异步Fifo。&lt;/p&gt;</description>
     </item>
     
   </channel>

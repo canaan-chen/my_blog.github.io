@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.68.3 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="
+大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。">
+
+
+<meta property="og:description" content="
+大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在windows 体验极致模仿Mac os系统桌面">
+<meta name="twitter:title" content="如何在windows 体验极致模仿Mac os系统桌面">
+<meta property="og:url" content="https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+<meta property="twitter:url" content="https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="
+大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。">
+<meta name="twitter:description" content="
+大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-04-06T00:23:26">
+  
+  
+    <meta property="article:modified_time" content="2020-04-06T00:23:26">
+  
+  
+  
+    
+      <meta property="article:section" content="Windows美化">
+    
+  
+  
+    
+      <meta property="article:tag" content="mydock">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>如何在windows 体验极致模仿Mac os系统桌面</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="1">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="1">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="1"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      如何在windows 体验极致模仿Mac os系统桌面
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-04-06T00:23:26&#43;08:00">
+        
+  April 6, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/windows%e7%be%8e%e5%8c%96">Windows美化</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><img src="https://cdn.sspai.com/2020/04/06/31487db0bb60db90a4640f623c417063.jpg?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1" alt="img"></p>
+<p>大家好，我是鱼叔，今天在这里聊一下如何在windows上体验极致模仿的Mac os 系统桌面。其实很多人都有这样的疑问，既然欣赏Mac os系统，那为什么要买pc呢，与其在pc上捣鼓让它变得像mac，还不如直接买一台macbook。当然，在经济条件允许的条件下，最香的方法就是直接买一个mac，本文适用于那些想在pc端体验Mac os桌面的用户，以及那些习惯mac系统但是因为现实条件使用pc的用户。</p>
+<p>先上效果图：</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405200214.png" alt="img"></p>
+<h2 id="工具介绍">工具介绍</h2>
+<blockquote>
+<p>工具：Mydock Myfinder</p>
+</blockquote>
+<p>本文所使用的工具是 Mydock 和 Myfinder。 不同于大家熟悉的rocketdock，这个软件的安装更加快捷方便，直接在<a href="https://www.mydockfinder.com/">官网</a>中下载，然后解压运行exe文件即可（注意事项：最好用edge 浏览器下载，chrome会把文件视为病毒而拒绝下载）。</p>
+<h2 id="mydock">Mydock</h2>
+<p>在下载完成后，点击运行dock.exe，你就会发现桌面已经出现了类似mac os系统的dock。</p>
+<h3 id="在dock上添加相关的应用和文件">在dock上添加相关的应用和文件</h3>
+<p>初始化的dock上只有finder、Launchpad和废纸篓，为了丰富应用，Mydock 提供了两种添加的方式：</p>
+<ol>
+<li>直接将桌面上的应用icon拖到dock上；</li>
+<li>打开你想要的添加的软件，这时候dock上会显示出那个软件的图标，然后右击图标选择“在Dock中保留”。</li>
+</ol>
+<p>添加文件或者文件夹也是相同的方法。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405201247.png" alt="img"></p>
+<h3 id="launchpad-的设置">Launchpad 的设置</h3>
+<p>我在Launchpad中体会到了官网所说的“极致模仿”，当我打开这个Launchpad的时候，显示图是这样的:</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405201648.png" alt="img"></p>
+<p>这不就是mac os 吗？看到这个效果图的时候，我是惊呆的。当然这和真实mac下的Launchpad还是不一样，里面的软件不是自动生成的，用户需要手动添加自己应用，只需要右键Launchpad，点击“添加图标” ，将所用放的软件拖进去即可。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405201936.png" alt="img"></p>
+<p>不要以为这样就结束了，开发者还给Launchpad提供了一个设置选项，右键dock选择“dock偏好设置”，在其他选项中，有一个“使用开始菜单代替Launchpad”的选项，当你勾选这个选项时，你就会发现点击Launchpad，桌面会弹出windows的开始菜单，这简直是非常考虑pc用户的使用习惯了。</p>
+<p><img src="https://cdn.sspai.com/2020/04/06/dc2ca271af8041cea3c4a6b3bcc22cac.gif" alt="img">请输入图片标题</p>
+<h3 id="提供个性化的logo更替功能">提供个性化的logo更替功能</h3>
+<p>不满意软件自带的logo，或者想要自己弄一个统一风格的dock？Mydock为想要个性化的用户提供了自定义logo的功能，只需要右键相应dock上的软件，点击“设置此图标”，将你想用的logo png 文件拖到指定地方即可。</p>
+<h3 id="消息提醒方式">消息提醒方式</h3>
+<p>Mydock 让消息提醒以方块的形式从右边弹出，很好地模拟了Mac os 消息提醒的方式。但是因为软件没法读取微信等通信工具中具体的消息数量，因此在dock中的消息数量不是很精确。</p>
+<p><img src="https://cdn.sspai.com/2020/04/05/16c5592ef2f437f6cdcc0dcde1baf3f4.jpg" alt="img">图片来自官网</p>
+<h3 id="相关的设置">相关的设置</h3>
+<p>为了更加贴近Mac os系统，dock 在偏好设置中提供了很多设置，由于功能较多，就不全部细讲，我会挑几个我觉得比较实用的功能来进行介绍。</p>
+<ol>
+<li>通用选项里主要用于设置Dock 上的图标大小，以及图标间距和dock所处位置。</li>
+<li>高级选项中主要为使用时的习惯设置，包括动画效果，以及渲染效果等。推荐其中勾选“开机自启动”和“自动隐藏任务栏”选项。 <img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405204356.png" alt="img"></li>
+<li>其他选项中值得关注的设置是“开始菜单代替Launchpad” 以及 “全局模糊效果”。</li>
+</ol>
+<h2 id="myfinder">Myfinder</h2>
+<p>Myfinder的安装和Mydock 相似，直接运行exe文件即可，随后就会发现自己的桌面上方出现了类似Mac os的finder栏。Myfinder 提供了对电脑信息的实时监控，包括CPU、硬盘空间、内存占有量等，同时还支持显示托盘（再也不用担心windows任务栏消失后，找不到在后台运行的软件了）。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405231634.png" alt="img"></p>
+<p>Myfinder 还有一个很有趣的设计，它保留了一个Siri标志，用鼠标点击后会弹出windows的Cortana语音助手，另外Myfinder上的搜索功能会自动将输入的内容用于百度搜索，和实际的Mac os 操作还是有区别的。</p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405232502.png" alt="img"></p>
+<p><img src="https://image-1301586523.cos.ap-shanghai.myqcloud.com/20200405232638.png" alt="myfinder的搜索栏"></p>
+<h2 id="使用体验总结">使用体验总结</h2>
+<p>Mydock 和 Myfinder 带给我整体的使用体验是很惊艳的，没有复杂的操作设置，简单的下载和安装就能带来极其逼真的Mac os桌面模拟体验。除此之外，它的很多细节设计大大地提高了用户体验，有一种Windows和Mac os的融合感。最后，不得不说的还是它的极致模拟带给用户沉浸式的体验，将Mac os的桌面基本原封不动地给搬到了pc上。当然，这款软件还是有一些问题，比如会占用一定的内存，以及有时候会莫名其妙地奔溃，不过相信这款软件会不断地被优化。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://example.org/tags/mydock/">mydock</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/" data-tooltip="hexo Next 主题修改tips">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/posts/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips/" data-tooltip="hexo Next 主题修改tips">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/posts/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25A6%2582%25E4%25BD%2595%25E5%259C%25A8windows-%25E4%25BD%2593%25E9%25AA%258C%25E6%259E%2581%25E8%2587%25B4%25E6%25A8%25A1%25E4%25BB%25BFmac-os%25E7%25B3%25BB%25E7%25BB%259F%25E6%25A1%258C%25E9%259D%25A2%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25A6%2582%25E4%25BD%2595%25E5%259C%25A8windows-%25E4%25BD%2593%25E9%25AA%258C%25E6%259E%2581%25E8%2587%25B4%25E6%25A8%25A1%25E4%25BB%25BFmac-os%25E7%25B3%25BB%25E7%25BB%259F%25E6%25A1%258C%25E9%259D%25A2%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2Fposts%2F%25E5%25A6%2582%25E4%25BD%2595%25E5%259C%25A8windows-%25E4%25BD%2593%25E9%25AA%258C%25E6%259E%2581%25E8%2587%25B4%25E6%25A8%25A1%25E4%25BB%25BFmac-os%25E7%25B3%25BB%25E7%25BB%259F%25E6%25A1%258C%25E9%259D%25A2%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/posts\/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2\/';
+          
+            this.page.identifier = '\/posts\/%E5%A6%82%E4%BD%95%E5%9C%A8windows-%E4%BD%93%E9%AA%8C%E6%9E%81%E8%87%B4%E6%A8%A1%E4%BB%BFmac-os%E7%B3%BB%E7%BB%9F%E6%A1%8C%E9%9D%A2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
