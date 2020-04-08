@@ -1,7 +1,7 @@
 baseURL: "http://unclefish.ink/my_blog.github.io/"
 #baseURL: "//example.org"
-relativeURLs: true
-uglyURLs: true
+#relativeURLs: true
+#uglyURLs: true
 theme: pure
 title: UncleFish's Blog
 defaultContentLanguage: en  # en/zh/...
