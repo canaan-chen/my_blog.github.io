@@ -1,5 +1,5 @@
 #baseURL: 
-baseURL: "//example.org"
+#baseURL: "//example.org"
 relativeURLs: true
 uglyURLs: true
 theme: pure
