@@ -3,6 +3,55 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://unclefish.ink/my_blog.github.io/categories.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/tags/hugo.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/posts.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/tags.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://unclefish.ink/my_blog.github.io/2020/04/%E6%B5%85%E8%B0%88hugo%E5%BB%BA%E7%AB%99.html</loc>
+    <lastmod>2020-04-10T10:59:21+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://unclefish.ink/my_blog.github.io/about/about.html</loc>
     <lastmod>2020-04-08T10:36:45+08:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -17,35 +66,7 @@
   </url>
   
   <url>
-    <loc>http://unclefish.ink/my_blog.github.io/</loc>
-    <lastmod>2020-04-08T10:36:45+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://unclefish.ink/my_blog.github.io/categories.html</loc>
-    <lastmod>2020-04-06T00:23:26+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>http://unclefish.ink/my_blog.github.io/tags/mydock.html</loc>
-    <lastmod>2020-04-06T00:23:26+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://unclefish.ink/my_blog.github.io/posts.html</loc>
-    <lastmod>2020-04-06T00:23:26+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://unclefish.ink/my_blog.github.io/tags.html</loc>
     <lastmod>2020-04-06T00:23:26+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -74,13 +95,6 @@
   
   <url>
     <loc>http://unclefish.ink/my_blog.github.io/2020/04/hexo-next-%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9tips.html</loc>
-    <lastmod>2020-04-04T15:01:48+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://unclefish.ink/my_blog.github.io/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99tips.html</loc>
     <lastmod>2020-04-04T15:01:48+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

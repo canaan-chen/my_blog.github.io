@@ -5,10 +5,21 @@
     <link>http://unclefish.ink/my_blog.github.io/categories.html</link>
     <description>Recent content in Categories on UncleFish&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 06 Apr 2020 00:23:26 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Apr 2020 10:59:21 +0800</lastBuildDate>
     
         <atom:link href="http://unclefish.ink/my_blog.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>浅谈hugo建站</title>
+      <link>http://unclefish.ink/my_blog.github.io/2020/04/%E6%B5%85%E8%B0%88hugo%E5%BB%BA%E7%AB%99.html</link>
+      <pubDate>Fri, 10 Apr 2020 10:59:21 +0800</pubDate>
+      
+      <guid>http://unclefish.ink/my_blog.github.io/2020/04/%E6%B5%85%E8%B0%88hugo%E5%BB%BA%E7%AB%99.html</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://cdn.sspai.com/2020/04/09/0d0641fc7dda81e960abc227c48eb8a1.png?imageMogr2/quality/95/thumbnail/!1420x708r/gravity/Center/crop/1420x708/interlace/1&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;「大家好，我是鱼叔，前不久我刚用hexo搭建完我的博客，但是最近在隔离期无所事事，秉着“生命在于折腾”的精神，我又将博客从Hexo迁移到了Hugo上，这篇文章主要讲为什么我要选择Hugo，以及Hugo搭建博客的一些tips。」&lt;/p&gt;
+&lt;p&gt;HUGO 博客链接：http://unclefish.ink/my_blog.github.io/&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>About</title>
